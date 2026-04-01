@@ -1,81 +1,49 @@
 import FadeIn from './FadeIn'
 import TextReveal from './TextReveal'
 
-const stack = [
-  {
-    layer: 'Frontend',
-    items: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
-    icon: '◈',
-  },
-  {
-    layer: 'Backend',
-    items: ['FastAPI', 'Python', 'Node.js', 'REST APIs'],
-    icon: '◈',
-  },
-  {
-    layer: 'Data and AI',
-    items: ['PostgreSQL', 'SQLite', 'OpenAI API', 'LLM Evaluation'],
-    icon: '◈',
-  },
-  {
-    layer: 'Infrastructure',
-    items: ['Docker', 'Docker Compose', 'Git', 'Vercel'],
-    icon: '◈',
-  },
-]
-
 export default function About() {
   return (
-    <section id="about" className="py-32 px-8 border-t border-line bg-bg">
+    <section id="about" className="py-40 px-8 border-t border-line bg-bg">
       <div className="max-w-6xl mx-auto">
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
 
           {/* Left: text */}
           <div>
             <FadeIn>
-              <p className="text-xs text-red tracking-widest uppercase mb-4 font-medium">
-                01 · About
-              </p>
+              <p className="text-[10px] text-red tracking-[0.22em] uppercase mb-6 font-medium">01 · About</p>
             </FadeIn>
 
             <TextReveal delay={60}>
               <h2
-                className="font-serif text-[clamp(2.6rem,5vw,4rem)] font-semibold text-ink leading-none mb-8"
-                style={{ letterSpacing: '-0.02em' }}
+                className="font-serif font-semibold text-ink leading-[0.92] mb-10"
+                style={{ fontSize: 'clamp(3rem,5.5vw,5.5rem)', letterSpacing: '-0.04em' }}
               >
-                Front to back,
-                <br />
-                <span className="gradient-text">every layer.</span>
+                I own features<br />
+                <span className="gradient-text">start to finish.</span>
               </h2>
             </TextReveal>
 
-            <FadeIn delay={120}>
-              <div className="space-y-4 text-muted leading-relaxed text-[0.95rem] mb-10">
+            <FadeIn delay={140}>
+              <div className="space-y-5 text-muted leading-relaxed text-[0.95rem] mb-12 max-w-md">
                 <p>
-                  I work across the full stack. On any given project I am writing
-                  FastAPI routes, building the React UI, wiring up Docker, and
-                  dropping in an OpenAI integration on top of it.
+                  I design the database schema, write the FastAPI routes, build the React UI, wire Docker Compose, and deploy — as one cohesive system. Not just code features in isolation.
                 </p>
                 <p>
-                  A lot of my recent work touches LLMs in some way. Not just wrapping
-                  APIs, but thinking about evaluation, context management, and making AI
-                  features that behave predictably under real conditions.
+                  Most of my projects involve LLMs in some meaningful way. Not just API wrappers — I've built evaluation frameworks, structured output pipelines, and context management systems that behave predictably under real load.
                 </p>
                 <p>
-                  I want a role where I can ship real things, learn from good engineers,
-                  and get better fast. Based in Dallas, TX and open to remote.
+                  Looking for a backend or full stack role where I can own real features, ship fast, and learn from engineers who care about the fundamentals. Based in Dallas, TX and open to remote.
                 </p>
               </div>
             </FadeIn>
 
-            <FadeIn delay={200}>
-              <div className="flex gap-4">
+            <FadeIn delay={220}>
+              <div className="flex gap-5">
                 <a
                   href="https://github.com/satvikp29"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs tracking-widest uppercase text-red border-b border-red/30 pb-0.5 hover:border-red transition-colors duration-500"
+                  className="text-[11px] tracking-[0.2em] uppercase text-red border-b border-red/25 pb-0.5 hover:border-red transition-colors duration-500"
                 >
                   GitHub ↗
                 </a>
@@ -83,7 +51,7 @@ export default function About() {
                   href="https://www.linkedin.com/in/satvikreddy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs tracking-widest uppercase text-red border-b border-red/30 pb-0.5 hover:border-red transition-colors duration-500"
+                  className="text-[11px] tracking-[0.2em] uppercase text-red border-b border-red/25 pb-0.5 hover:border-red transition-colors duration-500"
                 >
                   LinkedIn ↗
                 </a>
@@ -91,78 +59,78 @@ export default function About() {
             </FadeIn>
           </div>
 
-          {/* Right: terminal — stays dark intentionally, shows real dev feel */}
+          {/* Right: terminal */}
           <FadeIn delay={100}>
-            <div className="rounded-lg overflow-hidden border border-line" style={{ background: '#111111' }}>
-              <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: '#222', background: '#1A1A1A' }}>
+            <div className="rounded-none overflow-hidden" style={{ background: '#0E0E0E', border: '1px solid #1E1E1E' }}>
+              {/* Terminal chrome */}
+              <div
+                className="flex items-center justify-between px-5 py-3.5 border-b"
+                style={{ borderColor: '#1E1E1E', background: '#161616' }}
+              >
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full" style={{ background: '#C8102E', opacity: 0.8 }} />
-                  <div className="w-3 h-3 rounded-full" style={{ background: '#333' }} />
-                  <div className="w-3 h-3 rounded-full" style={{ background: '#333' }} />
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#C8102E', opacity: 0.75 }} />
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
                 </div>
-                <span className="text-xs font-mono ml-2" style={{ color: '#666' }}>terminal</span>
+                <span className="text-[10px] font-mono tracking-widest" style={{ color: '#444' }}>project-root</span>
+                <div style={{ width: '44px' }} />
               </div>
-              <pre className="p-5 text-xs font-mono leading-[1.85] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+
+              <pre className="p-6 text-[11px] font-mono leading-[1.9] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
                 <code>
-                  <span style={{ color: '#555' }}>$ </span>
+                  <span style={{ color: '#3A3A3A' }}>$ </span>
                   <span style={{ color: '#C8102E' }}>docker compose</span>
-                  <span style={{ color: '#888' }}> up --build</span>
+                  <span style={{ color: '#666' }}> up --build</span>
                   {'\n'}
-                  <span style={{ color: '#333' }}>[+] Building 4/4</span>
+                  <span style={{ color: '#2A2A2A' }}>[+] Building 4/4</span>
                   {'\n'}
-                  <span style={{ color: '#444' }}> ✔ api        built in 3.2s</span>
+                  <span style={{ color: '#333' }}> ✔ api        </span><span style={{ color: '#2A6B2A' }}>built in 3.2s</span>
                   {'\n'}
-                  <span style={{ color: '#444' }}> ✔ web        built in 5.8s</span>
+                  <span style={{ color: '#333' }}> ✔ web        </span><span style={{ color: '#2A6B2A' }}>built in 5.8s</span>
                   {'\n'}
-                  <span style={{ color: '#444' }}> ✔ db         ready</span>
+                  <span style={{ color: '#333' }}> ✔ db         </span><span style={{ color: '#2A6B2A' }}>ready</span>
                   {'\n'}
-                  <span style={{ color: '#444' }}> ✔ nginx      ready</span>
-                  {'\n'}
-                  <span style={{ color: '#777' }}>Starting services...</span>
+                  <span style={{ color: '#333' }}> ✔ nginx      </span><span style={{ color: '#2A6B2A' }}>ready</span>
                   {'\n'}
                   <span style={{ color: '#555' }}>api_1  | </span>
-                  <span style={{ color: '#888' }}>Uvicorn running on http://0.0.0.0:8000</span>
+                  <span style={{ color: '#777' }}>Uvicorn running on </span>
+                  <span style={{ color: '#555' }}>http://0.0.0.0:8000</span>
                   {'\n'}
                   <span style={{ color: '#555' }}>web_1  | </span>
-                  <span style={{ color: '#888' }}>Ready on http://localhost:3000</span>
+                  <span style={{ color: '#777' }}>Ready on </span>
+                  <span style={{ color: '#555' }}>http://localhost:3000</span>
                   {'\n\n'}
-                  <span style={{ color: '#555' }}>$ </span>
+                  <span style={{ color: '#3A3A3A' }}>$ </span>
                   <span style={{ color: '#C8102E' }}>curl</span>
-                  <span style={{ color: '#888' }}> http://localhost:8000/health</span>
+                  <span style={{ color: '#666' }}> localhost:8000/health</span>
                   {'\n'}
-                  <span style={{ color: '#666' }}>{'{"status":"ok","version":"1.0.0"}'}</span>
+                  <span style={{ color: '#444' }}>{'{"status":"ok","uptime":"3.1s","db":"connected"}'}</span>
+                  {'\n\n'}
+                  <span style={{ color: '#3A3A3A' }}>$ </span>
+                  <span style={{ color: '#C8102E' }}>pytest</span>
+                  <span style={{ color: '#666' }}> tests/ -v --tb=short</span>
+                  {'\n'}
+                  <span style={{ color: '#333' }}>collected 24 items</span>
+                  {'\n'}
+                  <span style={{ color: '#3A3A3A' }}>tests/test_routes.py   </span>
+                  <span style={{ color: '#2A6B2A' }}>........ [ 33%]</span>
+                  {'\n'}
+                  <span style={{ color: '#3A3A3A' }}>tests/test_models.py   </span>
+                  <span style={{ color: '#2A6B2A' }}>........ [ 66%]</span>
+                  {'\n'}
+                  <span style={{ color: '#3A3A3A' }}>tests/test_services.py </span>
+                  <span style={{ color: '#2A6B2A' }}>........ [100%]</span>
+                  {'\n\n'}
+                  <span style={{ color: '#2A6B2A' }}>24 passed</span>
+                  <span style={{ color: '#444' }}> in 1.42s</span>
+                  <span style={{ color: '#3A3A3A' }}> ·</span>
+                  <span style={{ color: '#444' }}> 0 warnings</span>
                 </code>
               </pre>
             </div>
           </FadeIn>
-        </div>
 
-        {/* Stack grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stack.map((group, i) => (
-            <FadeIn key={group.layer} delay={i * 70 + 80}>
-              <div className="card-luxury p-5 rounded-lg h-full">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-red/40 text-xs">{group.icon}</span>
-                  <span className="text-xs text-red/70 tracking-widest uppercase font-medium">
-                    {group.layer}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className="px-2.5 py-1 text-xs rounded bg-bg text-muted border border-line hover:text-ink hover:border-red/20 transition-all duration-500"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </FadeIn>
-          ))}
         </div>
-
       </div>
     </section>
   )
