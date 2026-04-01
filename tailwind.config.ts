@@ -9,23 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: '#06060C',
-        surface: '#0A0A16',
-        card: '#0F0F1E',
-        'card-hover': '#141428',
-        gold: {
-          DEFAULT: '#C9A96E',
-          light: '#E2C98A',
-          dim: '#6B5530',
-          subtle: 'rgba(201,169,110,0.08)',
-          border: 'rgba(201,169,110,0.18)',
+        bg: '#FAFAF8',
+        surface: '#F2EFEB',
+        card: '#E9E5E0',
+        'card-hover': '#E0DBD5',
+        red: {
+          DEFAULT: '#C8102E',
+          light: '#E51A38',
+          dim: '#8A0A20',
+          subtle: 'rgba(200,16,46,0.07)',
+          border: 'rgba(200,16,46,0.2)',
         },
-        cream: '#F0EAE0',
-        muted: '#7A7468',
-        dim: '#38342E',
+        ink: '#111111',
+        muted: '#8A8070',
+        dim: '#C0B8B0',
         line: {
-          DEFAULT: '#191929',
-          light: '#21213A',
+          DEFAULT: '#E0DBD5',
+          light: '#EBE7E2',
         },
       },
       fontFamily: {
@@ -33,15 +33,10 @@ const config: Config = {
         serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
       },
       backgroundImage: {
-        'grid-pattern':
-          'linear-gradient(rgba(25,25,45,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(25,25,45,0.6) 1px, transparent 1px)',
-        'gold-shimmer':
-          'linear-gradient(105deg, transparent 35%, rgba(201,169,110,0.12) 50%, transparent 65%)',
-        'gold-gradient':
-          'linear-gradient(135deg, #E2C98A 0%, #C9A96E 45%, #9A7840 100%)',
-      },
-      backgroundSize: {
-        grid: '72px 72px',
+        'red-shimmer':
+          'linear-gradient(105deg, transparent 35%, rgba(200,16,46,0.06) 50%, transparent 65%)',
+        'red-gradient':
+          'linear-gradient(135deg, #E51A38 0%, #C8102E 50%, #8A0A20 100%)',
       },
       animation: {
         marquee: 'marquee 40s linear infinite',

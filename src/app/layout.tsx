@@ -16,13 +16,13 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: 'Satvik Reddy Parvathareddy — Full Stack Developer',
+  title: 'Satvik Reddy Parvathareddy — Full Stack Developer · Dallas, TX',
   description:
-    'Full stack developer specialising in Python, TypeScript, and AI-powered applications. Building production-grade tools end to end.',
+    'Full stack developer based in Dallas, TX. Python, TypeScript, and AI powered applications built end to end.',
   openGraph: {
-    title: 'Satvik Reddy Parvathareddy — Full Stack Developer',
+    title: 'Satvik Reddy Parvathareddy — Full Stack Developer · Dallas, TX',
     description:
-      'Full stack developer specialising in Python, TypeScript, and AI-powered applications.',
+      'Full stack developer based in Dallas, TX. Python, TypeScript, and AI powered applications.',
     type: 'website',
   },
 }

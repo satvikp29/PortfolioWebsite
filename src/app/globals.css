@@ -7,21 +7,21 @@ html {
 }
 
 body {
-  background-color: #06060C;
-  color: #F0EAE0;
+  background-color: #FAFAF8;
+  color: #111111;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background-color: rgba(201, 169, 110, 0.22);
-  color: #E2C98A;
+  background-color: rgba(200, 16, 46, 0.15);
+  color: #C8102E;
 }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #06060C; }
-::-webkit-scrollbar-thumb { background: #21213A; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #C9A96E; }
+::-webkit-scrollbar-track { background: #FAFAF8; }
+::-webkit-scrollbar-thumb { background: #D0C8C0; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #C8102E; }
 
 /* ── Keyframes ──────────────────────────────────── */
 
@@ -41,7 +41,7 @@ body {
 }
 
 @keyframes borderPulse {
-  0%, 100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.5; }
   50%       { opacity: 1; }
 }
 
@@ -49,41 +49,33 @@ body {
 
 @layer utilities {
   .gradient-text {
-    background: linear-gradient(135deg, #E2C98A 0%, #C9A96E 45%, #9A7840 100%);
+    background: linear-gradient(135deg, #E51A38 0%, #C8102E 50%, #8A0A20 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .gradient-text-cream {
-    background: linear-gradient(135deg, #F0EAE0 0%, #C9A96E 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Clip-path reveal for lines of text */
   .overflow-clip {
     overflow: hidden;
   }
 
+  /* Light luxury card */
   .card-luxury {
-    background: #0F0F1E;
-    border: 1px solid #191929;
+    background: #F2EFEB;
+    border: 1px solid #E0DBD5;
     transition: border-color 0.75s cubic-bezier(0.65, 0.05, 0, 1),
                 background 0.75s cubic-bezier(0.65, 0.05, 0, 1),
                 transform 0.75s cubic-bezier(0.65, 0.05, 0, 1);
   }
 
   .card-luxury:hover {
-    border-color: rgba(201, 169, 110, 0.22);
-    background: #141428;
+    border-color: rgba(200, 16, 46, 0.25);
+    background: #ECE8E3;
     transform: translateY(-2px);
   }
 
-  /* Gold line accent — used as decorative dividers */
-  .gold-line {
+  .red-line {
     height: 1px;
-    background: linear-gradient(90deg, transparent, #C9A96E 30%, #C9A96E 70%, transparent);
+    background: linear-gradient(90deg, transparent, #C8102E 30%, #C8102E 70%, transparent);
   }
 }

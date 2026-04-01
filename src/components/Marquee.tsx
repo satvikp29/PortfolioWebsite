@@ -9,12 +9,14 @@ export default function Marquee() {
 
   return (
     <div className="relative overflow-hidden py-5 border-y border-line">
-      {/* Edge fade masks */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #06060C, transparent)' }} />
-      <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(-90deg, #06060C, transparent)' }} />
-
+      <div
+        className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, #FAFAF8, transparent)' }}
+      />
+      <div
+        className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(-90deg, #FAFAF8, transparent)' }}
+      />
       <div
         className="flex gap-8 whitespace-nowrap"
         style={{ animation: 'marquee 40s linear infinite' }}
@@ -22,7 +24,7 @@ export default function Marquee() {
         {doubled.map((item, i) => (
           <span key={i} className="flex items-center gap-8 text-sm tracking-widest uppercase">
             <span className="text-muted">{item}</span>
-            <span className="text-gold-dim text-xs">✦</span>
+            <span className="text-xs" style={{ color: 'rgba(200,16,46,0.3)' }}>✦</span>
           </span>
         ))}
       </div>
