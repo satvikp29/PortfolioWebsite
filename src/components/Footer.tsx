@@ -57,7 +57,7 @@ export default function Footer() {
 
         <div className="mt-24 pt-8 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <a href="#" className="font-serif gradient-text text-xl font-semibold tracking-wider">
-            SRP.
+            Satvik Reddy
           </a>
           <p className="text-xs text-dim">
             © {new Date().getFullYear()} Satvik Reddy Parvathareddy · Dallas, TX

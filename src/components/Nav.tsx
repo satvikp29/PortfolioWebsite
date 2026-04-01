@@ -30,7 +30,7 @@ export default function Nav() {
     >
       <nav className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
         <a href="#" className="font-serif text-xl font-semibold gradient-text tracking-wider">
-          SRP.
+          Satvik Reddy
         </a>
 
         <ul className="flex items-center gap-8">

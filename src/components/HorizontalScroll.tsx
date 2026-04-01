@@ -206,7 +206,7 @@ export default function HorizontalScroll() {
                 <div className="w-1/2 flex flex-col justify-center px-16 py-20 border-r border-line bg-bg">
                   <span
                     className="font-serif leading-none mb-3"
-                    style={{ fontSize: '110px', color: 'rgba(200,16,46,0.07)', fontWeight: 700 }}
+                    style={{ fontSize: '110px', color: 'rgba(200,16,46,0.22)', fontWeight: 700 }}
                   >
                     {project.index}
                   </span>
