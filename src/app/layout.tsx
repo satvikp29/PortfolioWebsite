@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter, Cormorant_Garamond } from 'next/font/google'
+import { Cormorant_Garamond, Syne, DM_Mono } from 'next/font/google'
+import Cursor from '@/components/Cursor'
 import './globals.css'
 
-const inter = Inter({
+const syne = Syne({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-syne',
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 })
 
@@ -12,6 +14,13 @@ const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   variable: '--font-cormorant',
   weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  variable: '--font-dm-mono',
+  weight: ['300', '400', '500'],
   display: 'swap',
 })
 
@@ -29,8 +38,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
-      <body className="font-sans">{children}</body>
+    <html lang="en" className={`${syne.variable} ${cormorant.variable} ${dmMono.variable}`}>
+      <body>
+        <Cursor />
+        <div className="grain-overlay" aria-hidden="true" />
+        {children}
+      </body>
     </html>
   )
 }

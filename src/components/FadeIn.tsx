@@ -6,7 +6,8 @@ interface FadeInProps {
   children: React.ReactNode
   delay?: number
   className?: string
-  direction?: 'up' | 'none'
+  direction?: 'up' | 'none' | 'left'
+  distance?: number
 }
 
 export default function FadeIn({
@@ -14,6 +15,7 @@ export default function FadeIn({
   delay = 0,
   className = '',
   direction = 'up',
+  distance = 28,
 }: FadeInProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
@@ -26,12 +28,18 @@ export default function FadeIn({
           observer.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     )
     const el = ref.current
     if (el) observer.observe(el)
     return () => observer.disconnect()
   }, [])
+
+  const getTransform = () => {
+    if (direction === 'up') return visible ? 'translateY(0)' : `translateY(${distance}px)`
+    if (direction === 'left') return visible ? 'translateX(0)' : `translateX(${distance}px)`
+    return undefined
+  }
 
   return (
     <div
@@ -39,13 +47,8 @@ export default function FadeIn({
       className={className}
       style={{
         opacity: visible ? 1 : 0,
-        transform:
-          direction === 'up'
-            ? visible
-              ? 'translateY(0)'
-              : 'translateY(32px)'
-            : undefined,
-        transition: `opacity 0.85s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms, transform 0.85s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms`,
+        transform: getTransform(),
+        transition: `opacity 0.9s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms, transform 0.9s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms`,
       }}
     >
       {children}

@@ -29,8 +29,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-syne)', 'system-ui', 'sans-serif'],
         serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        mono: ['var(--font-dm-mono)', 'Menlo', 'monospace'],
       },
       backgroundImage: {
         'red-shimmer':

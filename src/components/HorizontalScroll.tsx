@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { highlight } from '@/lib/highlight'
 
 const projects = [
@@ -146,6 +146,43 @@ async def match_jobs(
   },
 ]
 
+function TiltCard({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top + rect.height / 2
+    const dx = (e.clientX - cx) / (rect.width / 2)
+    const dy = (e.clientY - cy) / (rect.height / 2)
+    el.style.transform = `perspective(900px) rotateX(${-dy * 3}deg) rotateY(${dx * 4}deg) scale(1.01)`
+  }, [])
+
+  const onMouseLeave = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)'
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        ...style,
+        transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        willChange: 'transform',
+      }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </div>
+  )
+}
+
 export default function HorizontalScroll() {
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -191,7 +228,7 @@ export default function HorizontalScroll() {
 
         {/* Section label + counter */}
         <div className="absolute top-8 left-8 z-20 flex items-center gap-6">
-          <p className="text-[10px] text-red tracking-[0.22em] uppercase font-medium">02 · Projects</p>
+          <p className="text-[10px] text-red tracking-[0.22em] uppercase font-semibold">02 · Projects</p>
           <span className="text-[10px] text-muted font-mono tracking-widest">
             {String(currentPanel + 1).padStart(2, '0')} / {String(numPanels).padStart(2, '0')}
           </span>
@@ -204,9 +241,10 @@ export default function HorizontalScroll() {
               key={i}
               className="transition-all duration-700"
               style={{
-                width: i === currentPanel ? '28px' : '6px',
+                width: i === currentPanel ? '32px' : '6px',
                 height: '2px',
                 background: i === currentPanel ? '#C8102E' : '#D8D3CE',
+                borderRadius: '1px',
               }}
             />
           ))}
@@ -216,28 +254,43 @@ export default function HorizontalScroll() {
         <div
           ref={trackRef}
           className="flex h-full"
-          style={{ width: `${numPanels * 100}vw`, willChange: 'transform' }}
+          style={{ width: `${numPanels * 100}vw`, willChange: 'transform', transition: 'transform 0.05s linear' }}
         >
-          {projects.map((project) => {
+          {projects.map((project, panelIndex) => {
             const highlighted = highlight(project.code, project.lang)
+            const isActive = panelIndex === currentPanel
             return (
               <div key={project.name} className="w-screen h-full shrink-0 flex">
 
-                {/* Left: project case study */}
-                <div className="w-1/2 flex flex-col justify-center px-16 py-20 border-r border-line bg-bg">
-
+                {/* Left: project case study with 3D tilt */}
+                <TiltCard
+                  className="w-1/2 flex flex-col justify-center px-16 py-20 border-r border-line bg-bg"
+                  style={{}}
+                >
                   {/* Watermark number */}
                   <span
                     className="font-serif leading-none mb-2 select-none"
-                    style={{ fontSize: '100px', color: 'rgba(200,16,46,0.1)', fontWeight: 700, lineHeight: 1 }}
+                    style={{
+                      fontSize: '110px',
+                      color: isActive ? 'rgba(200,16,46,0.09)' : 'rgba(200,16,46,0.05)',
+                      fontWeight: 700,
+                      lineHeight: 1,
+                      transition: 'color 0.8s ease',
+                    }}
                   >
                     {project.index}
                   </span>
 
-                  {/* Impact — the headline */}
+                  {/* Impact */}
                   <p
                     className="text-ink font-serif font-semibold leading-snug mb-5 -mt-4 max-w-sm"
-                    style={{ fontSize: 'clamp(1.1rem,1.6vw,1.4rem)', letterSpacing: '-0.015em' }}
+                    style={{
+                      fontSize: 'clamp(1.1rem,1.6vw,1.4rem)',
+                      letterSpacing: '-0.015em',
+                      opacity: isActive ? 1 : 0.7,
+                      transform: isActive ? 'translateY(0)' : 'translateY(6px)',
+                      transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.65,0.05,0,1)',
+                    }}
                   >
                     {project.impact}
                   </p>
@@ -245,19 +298,29 @@ export default function HorizontalScroll() {
                   {/* Name + tagline */}
                   <h3
                     className="font-serif font-semibold text-ink mb-1"
-                    style={{ fontSize: 'clamp(2.4rem,3.5vw,3.8rem)', letterSpacing: '-0.03em', lineHeight: 1 }}
+                    style={{
+                      fontSize: 'clamp(2.4rem,3.5vw,3.8rem)',
+                      letterSpacing: '-0.03em',
+                      lineHeight: 1,
+                      opacity: isActive ? 1 : 0.6,
+                      transition: 'opacity 0.7s ease 0.05s',
+                    }}
                   >
                     {project.name}
                   </h3>
-                  <p className="text-[10px] text-red/60 tracking-[0.2em] uppercase mb-7">{project.tagline}</p>
+                  <p className="text-[10px] text-red/60 tracking-[0.2em] uppercase mb-7 font-semibold">{project.tagline}</p>
 
                   {/* Architecture flow */}
-                  <div className="flex items-center gap-1 mb-7">
+                  <div className="flex items-center gap-1 mb-7 flex-wrap">
                     {project.arch.map((node, i) => (
                       <span key={node} className="flex items-center gap-1">
                         <span
-                          className="text-[10px] font-mono px-2 py-1 border text-ink"
-                          style={{ background: '#F4F1EE', borderColor: '#D8D3CE' }}
+                          className="text-[10px] font-mono px-2.5 py-1 border text-ink"
+                          style={{
+                            background: '#F4F1EE',
+                            borderColor: '#D8D3CE',
+                            transition: 'border-color 0.4s ease, color 0.4s ease',
+                          }}
                         >
                           {node}
                         </span>
@@ -268,13 +331,19 @@ export default function HorizontalScroll() {
                     ))}
                   </div>
 
-                  {/* Engineering decisions — annotation style */}
+                  {/* Engineering decisions */}
                   <div className="space-y-3.5 mb-8">
-                    {project.decisions.map((d) => (
-                      <div key={d.id} className="flex gap-3 items-start">
-                        <span
-                          className="font-mono text-[9px] text-red/40 shrink-0 mt-0.5 tracking-widest"
-                        >
+                    {project.decisions.map((d, di) => (
+                      <div
+                        key={d.id}
+                        className="flex gap-3 items-start"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          transform: isActive ? 'translateX(0)' : 'translateX(-12px)',
+                          transition: `opacity 0.6s ease ${0.1 + di * 0.07}s, transform 0.6s cubic-bezier(0.65,0.05,0,1) ${0.1 + di * 0.07}s`,
+                        }}
+                      >
+                        <span className="font-mono text-[9px] text-red/40 shrink-0 mt-0.5 tracking-widest">
                           {d.id}.
                         </span>
                         <div>
@@ -289,33 +358,49 @@ export default function HorizontalScroll() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-ink border-b border-red/25 pb-0.5 hover:border-red hover:text-red w-fit transition-colors duration-300 tracking-wide"
+                    data-cursor="view"
+                    className="group text-xs text-ink font-semibold tracking-wide w-fit flex items-center gap-1.5"
                   >
-                    View on GitHub ↗
+                    <span className="border-b border-red/25 pb-0.5 group-hover:border-red group-hover:text-red transition-all duration-300">
+                      View on GitHub
+                    </span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-red">↗</span>
                   </a>
-                </div>
+                </TiltCard>
 
                 {/* Right: code block */}
-                <div className="w-1/2 flex items-center justify-center px-14" style={{ background: '#F0EDE9' }}>
+                <div
+                  className="w-1/2 flex items-center justify-center px-14"
+                  style={{
+                    background: '#EDECE8',
+                    transition: 'background 0.8s ease',
+                  }}
+                >
                   <div className="w-full max-w-lg">
-                    {/* System note above code */}
                     <p className="text-[10px] font-mono mb-3 tracking-widest" style={{ color: '#999' }}>
                       {project.note}
                     </p>
-                    <div style={{ border: '1px solid #1C1C1C', background: '#0E0E0E' }}>
+                    <div
+                      style={{
+                        border: '1px solid #1C1C1C',
+                        background: '#0C0C0C',
+                        boxShadow: isActive ? '0 32px 80px rgba(0,0,0,0.25), 0 8px 24px rgba(200,16,46,0.08)' : '0 8px 24px rgba(0,0,0,0.12)',
+                        transition: 'box-shadow 0.8s cubic-bezier(0.65,0.05,0,1)',
+                      }}
+                    >
                       <div
                         className="flex items-center gap-2 px-4 py-3 border-b"
-                        style={{ borderColor: '#1C1C1C', background: '#161616' }}
+                        style={{ borderColor: '#1C1C1C', background: '#141414' }}
                       >
                         <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#C8102E', opacity: 0.65 }} />
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#C8102E', opacity: 0.7 }} />
                           <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
                           <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
                         </div>
                         <span className="text-[10px] font-mono ml-2" style={{ color: '#555' }}>{project.filename}</span>
                       </div>
                       <pre
-                        className="p-5 text-[11px] font-mono leading-[1.75] overflow-x-auto"
+                        className="p-5 text-[11px] font-mono leading-[1.8] overflow-x-auto"
                         style={{ scrollbarWidth: 'none' }}
                       >
                         <code dangerouslySetInnerHTML={{ __html: highlighted }} />
@@ -330,9 +415,14 @@ export default function HorizontalScroll() {
         </div>
 
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-line">
-          <div ref={progressBarRef} className="h-full bg-red transition-none" style={{ width: '0%' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: '#E8E4E0' }}>
+          <div
+            ref={progressBarRef}
+            className="h-full transition-none"
+            style={{ width: '0%', background: 'linear-gradient(90deg, #8A0A20, #C8102E)' }}
+          />
         </div>
+
       </div>
     </div>
   )

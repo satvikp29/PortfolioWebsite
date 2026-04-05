@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import TextReveal from './TextReveal'
 
 const stackRows = [
@@ -20,72 +23,131 @@ const LinkedInIcon = () => (
 )
 
 export default function Hero() {
-  return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-bg">
+  const sectionRef = useRef<HTMLElement>(null)
+  const photoRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
+  const [loaded, setLoaded] = useState(false)
 
-      {/* Ambient glow */}
+  // Page load bar + initial reveal
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 80)
+    return () => clearTimeout(t)
+  }, [])
+
+  // Mouse parallax
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      const dx = (e.clientX - cx) / rect.width   // -0.5 → 0.5
+      const dy = (e.clientY - cy) / rect.height
+
+      if (photoRef.current) {
+        photoRef.current.style.transform = `translate(${dx * -18}px, ${dy * -14}px)`
+      }
+      if (glowRef.current) {
+        glowRef.current.style.transform = `translate(${dx * 30}px, ${dy * 20}px)`
+      }
+    }
+
+    section.addEventListener('mousemove', onMouseMove, { passive: true })
+    return () => section.removeEventListener('mousemove', onMouseMove)
+  }, [])
+
+  return (
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-bg">
+
+      {/* Page load bar */}
+      {loaded && <div className="load-bar" style={{ animationDuration: '1.1s' }} />}
+
+      {/* Ambient glows */}
       <div
-        className="absolute top-0 right-0 w-[700px] h-[700px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(200,16,46,0.055) 0%, transparent 60%)' }}
+        ref={glowRef}
+        className="absolute top-0 right-0 w-[800px] h-[800px] pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at top right, rgba(200,16,46,0.07) 0%, transparent 58%)',
+          transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        }}
       />
       <div
-        className="absolute bottom-0 left-0 w-[500px] h-[400px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(200,16,46,0.025) 0%, transparent 65%)' }}
+        className="absolute bottom-0 left-0 w-[600px] h-[500px] pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(200,16,46,0.03) 0%, transparent 65%)' }}
+      />
+
+      {/* Subtle grid — very faint */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(200,16,46,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(200,16,46,0.025) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+          maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%)',
+        }}
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-8 pt-28 pb-20 w-full">
 
-        {/* Location badge */}
+        {/* Status badge */}
         <div
-          className="inline-flex items-center gap-2.5 mb-12 px-3.5 py-1.5 rounded-full border"
           style={{
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.7s cubic-bezier(0.65,0.05,0,1) 0.1s, transform 0.7s cubic-bezier(0.65,0.05,0,1) 0.1s',
             borderColor: 'rgba(200,16,46,0.18)',
             background: 'rgba(200,16,46,0.04)',
-            animation: 'fadeUp 0.65s cubic-bezier(0.65,0.05,0,1) forwards',
-            opacity: 0,
           }}
+          className="inline-flex items-center gap-2.5 mb-12 px-3.5 py-1.5 rounded-full border"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-red" style={{ animation: 'borderPulse 2.5s ease-in-out infinite' }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-red" style={{ animation: 'borderPulse 2.2s ease-in-out infinite' }} />
           <span className="text-[10px] text-red tracking-[0.22em] uppercase font-medium">Dallas, TX · Open to Roles</span>
         </div>
 
-        {/* Monument name — full width */}
+        {/* Monument name */}
         <h1
           className="font-serif leading-[0.88] mb-10"
           style={{ letterSpacing: '-0.04em' }}
         >
-          <TextReveal delay={60}>
-            <span
-              className="block text-ink"
-              style={{ fontSize: 'clamp(3.5rem,7vw,7.5rem)', fontWeight: 600 }}
-            >
+          <TextReveal delay={80}>
+            <span className="block text-ink" style={{ fontSize: 'clamp(3.5rem,7vw,7.5rem)', fontWeight: 600 }}>
               Satvik Reddy
             </span>
           </TextReveal>
-          <TextReveal delay={130}>
-            <span
-              className="block gradient-text"
-              style={{ fontSize: 'clamp(3.5rem,7vw,7.5rem)', fontWeight: 600 }}
-            >
+          <TextReveal delay={160}>
+            <span className="block gradient-text" style={{ fontSize: 'clamp(3.5rem,7vw,7.5rem)', fontWeight: 600 }}>
               Parvathareddy.
             </span>
           </TextReveal>
         </h1>
 
-        {/* Divider */}
+        {/* Divider line that draws across */}
         <div
           className="w-full h-px bg-line mb-12"
-          style={{ animation: 'fadeUp 0.85s cubic-bezier(0.65,0.05,0,1) 200ms forwards', opacity: 0 }}
+          style={{
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'scaleX(1)' : 'scaleX(0)',
+            transformOrigin: 'left',
+            transition: 'opacity 0.5s ease 0.35s, transform 1s cubic-bezier(0.65,0.05,0,1) 0.35s',
+          }}
         />
 
-        {/* Below the name: descriptor + stack + CTAs left / photo right */}
+        {/* Content grid */}
         <div
           className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-16 items-start"
-          style={{ animation: 'fadeUp 0.85s cubic-bezier(0.65,0.05,0,1) 280ms forwards', opacity: 0 }}
+          style={{
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(30px)',
+            transition: 'opacity 0.85s cubic-bezier(0.65,0.05,0,1) 0.45s, transform 0.85s cubic-bezier(0.65,0.05,0,1) 0.45s',
+          }}
         >
           {/* Left */}
           <div>
-            <p className="text-xl text-ink font-medium leading-snug mb-1">
+            <p className="text-xl text-ink font-semibold leading-snug mb-1">
               Full stack engineer.
             </p>
             <p className="text-base text-muted leading-relaxed max-w-xl mb-10">
@@ -106,16 +168,23 @@ export default function Hero() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="#projects"
-                className="px-7 py-3 text-sm font-medium text-white hover:opacity-85 transition-opacity duration-500"
+                data-cursor="view"
+                className="btn-magnetic relative px-7 py-3 text-sm font-semibold text-white overflow-hidden group"
                 style={{ background: '#C8102E' }}
               >
-                View Projects
+                <span className="relative z-10 flex items-center gap-2">
+                  View Projects
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ transition: 'transform 0.3s ease', transform: 'translateX(0)' }} className="group-hover:translate-x-1 transition-transform duration-300">
+                    <path d="M1 6h10M6 1l5 5-5 5"/>
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-red-dim opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </a>
               <a
                 href="https://github.com/satvikp29"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-3 border border-line text-ink text-sm hover:border-red/40 hover:text-red transition-all duration-500"
+                className="btn-magnetic flex items-center gap-2 px-5 py-3 border border-line text-ink text-sm font-medium hover:border-red/40 hover:text-red transition-all duration-500 group"
               >
                 <GithubIcon />
                 GitHub
@@ -124,7 +193,7 @@ export default function Hero() {
                 href="https://www.linkedin.com/in/satvikreddy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-3 border border-line text-ink text-sm hover:border-red/40 hover:text-red transition-all duration-500"
+                className="btn-magnetic flex items-center gap-2 px-5 py-3 border border-line text-ink text-sm font-medium hover:border-red/40 hover:text-red transition-all duration-500 group"
               >
                 <LinkedInIcon />
                 LinkedIn
@@ -132,22 +201,28 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: photo — portrait crop */}
+          {/* Right: photo with parallax */}
           <div className="hidden lg:block">
             <div className="relative">
+              {/* Glow behind photo */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at center, rgba(200,16,46,0.12) 0%, transparent 70%)',
-                  transform: 'scale(1.25)',
-                  filter: 'blur(36px)',
+                  background: 'radial-gradient(ellipse at center, rgba(200,16,46,0.14) 0%, transparent 70%)',
+                  transform: 'scale(1.3)',
+                  filter: 'blur(40px)',
                 }}
               />
+
+              {/* Photo container with parallax */}
               <div
+                ref={photoRef}
                 className="relative overflow-hidden"
                 style={{
                   border: '1px solid rgba(200,16,46,0.22)',
                   aspectRatio: '4/5',
+                  transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                  willChange: 'transform',
                 }}
               >
                 <Image
@@ -157,20 +232,50 @@ export default function Hero() {
                   className="object-cover object-top"
                   priority
                 />
+                {/* Subtle vignette */}
                 <div
                   className="absolute inset-0 pointer-events-none"
-                  style={{ background: 'linear-gradient(180deg, transparent 55%, rgba(250,250,248,0.2) 100%)' }}
+                  style={{ background: 'linear-gradient(180deg, transparent 55%, rgba(250,250,248,0.18) 100%)' }}
                 />
               </div>
-              {/* Red corner accents */}
+
+              {/* Corner accents */}
               <div className="absolute -bottom-px -left-px w-14 h-px" style={{ background: '#C8102E' }} />
               <div className="absolute -bottom-px -left-px w-px h-14" style={{ background: '#C8102E' }} />
               <div className="absolute -top-px -right-px w-14 h-px" style={{ background: 'rgba(200,16,46,0.3)' }} />
               <div className="absolute -top-px -right-px w-px h-14" style={{ background: 'rgba(200,16,46,0.3)' }} />
+
+              {/* Floating label */}
+              <div
+                className="absolute -bottom-5 left-0 px-3 py-1.5 bg-bg border border-line"
+                style={{ animation: 'float 4s ease-in-out infinite' }}
+              >
+                <span className="text-[9px] font-mono tracking-[0.2em] text-muted uppercase">Dallas · TX</span>
+              </div>
             </div>
           </div>
         </div>
 
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        style={{
+          opacity: loaded ? 0.5 : 0,
+          transition: 'opacity 1s ease 1.2s',
+        }}
+      >
+        <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-muted">Scroll</span>
+        <div className="w-px h-10 bg-line overflow-hidden">
+          <div
+            className="w-full bg-red"
+            style={{
+              height: '40%',
+              animation: 'float 1.8s ease-in-out infinite',
+            }}
+          />
+        </div>
       </div>
     </section>
   )

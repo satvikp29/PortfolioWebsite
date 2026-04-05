@@ -26,7 +26,7 @@ export default function TextReveal({
           observer.disconnect()
         }
       },
-      { threshold: 0.05 }
+      { threshold: 0.02 }
     )
     const el = ref.current
     if (el) observer.observe(el)
@@ -37,10 +37,10 @@ export default function TextReveal({
     <div ref={ref} className={`overflow-hidden ${className}`}>
       <Tag
         style={{
-          transform: visible ? 'translateY(0)' : 'translateY(110%)',
-          opacity: visible ? 1 : 0.001,
-          transition: `transform 0.9s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms, opacity 0.4s ease ${delay}ms`,
           display: Tag === 'span' ? 'block' : undefined,
+          transform: visible ? 'translateY(0)' : 'translateY(112%)',
+          opacity: visible ? 1 : 0.001,
+          transition: `transform 1s cubic-bezier(0.65, 0.05, 0, 1) ${delay}ms, opacity 0.3s ease ${delay}ms`,
         }}
       >
         {children}
