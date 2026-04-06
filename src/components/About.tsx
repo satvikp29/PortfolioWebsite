@@ -5,89 +5,108 @@ import FadeIn from './FadeIn'
 import TextReveal from './TextReveal'
 
 const terminalLines = [
-  { delay: 300,  prompt: true,  text: 'docker compose up --build' },
-  { delay: 900,  prompt: false, text: '[+] Building 4/4' },
-  { delay: 1100, prompt: false, text: ' ✔ api         built in 3.2s', color: '#2A7B2A' },
-  { delay: 1350, prompt: false, text: ' ✔ web         built in 5.8s', color: '#2A7B2A' },
-  { delay: 1550, prompt: false, text: ' ✔ db          ready', color: '#2A7B2A' },
-  { delay: 1700, prompt: false, text: ' ✔ nginx       ready', color: '#2A7B2A' },
-  { delay: 2000, prompt: false, text: 'api_1  | Uvicorn running on http://0.0.0.0:8000', color: '#666' },
-  { delay: 2200, prompt: false, text: 'web_1  | Ready on http://localhost:3000', color: '#666' },
-  { delay: 2700, prompt: true,  text: 'curl localhost:8000/health' },
-  { delay: 3100, prompt: false, text: '{"status":"ok","uptime":"3.1s","db":"connected"}', color: '#555' },
-  { delay: 3600, prompt: true,  text: 'pytest tests/ -v --tb=short' },
-  { delay: 4000, prompt: false, text: 'collected 24 items' },
-  { delay: 4200, prompt: false, text: 'tests/test_routes.py    ........ [ 33%]', color: '#2A7B2A' },
-  { delay: 4450, prompt: false, text: 'tests/test_models.py    ........ [ 66%]', color: '#2A7B2A' },
-  { delay: 4700, prompt: false, text: 'tests/test_services.py  ........ [100%]', color: '#2A7B2A' },
-  { delay: 5000, prompt: false, text: '24 passed in 1.42s · 0 warnings', color: '#2A7B2A' },
+  { delay: 280,  prompt: true,  text: 'docker compose up --build', color: '' },
+  { delay: 850,  prompt: false, text: '[+] Building 4/4',          color: '#3A3835' },
+  { delay: 1050, prompt: false, text: ' ✔ api         built in 3.2s', color: '#3A7B3A' },
+  { delay: 1280, prompt: false, text: ' ✔ web         built in 5.8s', color: '#3A7B3A' },
+  { delay: 1450, prompt: false, text: ' ✔ db          ready',         color: '#3A7B3A' },
+  { delay: 1580, prompt: false, text: ' ✔ nginx       ready',         color: '#3A7B3A' },
+  { delay: 1870, prompt: false, text: 'api_1  | Uvicorn running on http://0.0.0.0:8000', color: '#4A4845' },
+  { delay: 2070, prompt: false, text: 'web_1  | Ready on http://localhost:3000',          color: '#4A4845' },
+  { delay: 2600, prompt: true,  text: 'curl localhost:8000/health', color: '' },
+  { delay: 2980, prompt: false, text: '{"status":"ok","uptime":"3.1s","db":"connected"}', color: '#5E5A54' },
+  { delay: 3500, prompt: true,  text: 'pytest tests/ -v --tb=short', color: '' },
+  { delay: 3900, prompt: false, text: 'collected 24 items',            color: '#3A3835' },
+  { delay: 4100, prompt: false, text: 'tests/test_routes.py    ........ [ 33%]', color: '#3A7B3A' },
+  { delay: 4350, prompt: false, text: 'tests/test_models.py    ........ [ 66%]', color: '#3A7B3A' },
+  { delay: 4600, prompt: false, text: 'tests/test_services.py  ........ [100%]', color: '#3A7B3A' },
+  { delay: 4900, prompt: false, text: '24 passed in 1.42s · 0 warnings', color: '#3A7B3A' },
 ]
 
 function AnimatedTerminal({ active }: { active: boolean }) {
-  const [visibleCount, setVisibleCount] = useState(0)
+  const [count, setCount] = useState(0)
   const started = useRef(false)
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const timers  = useRef<ReturnType<typeof setTimeout>[]>([])
 
   useEffect(() => {
     if (!active || started.current) return
     started.current = true
-
     terminalLines.forEach((line, i) => {
-      const t = setTimeout(() => setVisibleCount(i + 1), line.delay)
+      const t = setTimeout(() => setCount(i + 1), line.delay)
       timers.current.push(t)
     })
     return () => timers.current.forEach(clearTimeout)
   }, [active])
 
   return (
-    <div className="rounded-none overflow-hidden" style={{ background: '#0C0C0C', border: '1px solid #1A1A1A' }}>
-      {/* Chrome */}
+    <div style={{ background: '#080806', border: '1px solid #1A1916', overflow: 'hidden' }}>
+      {/* Chrome bar */}
       <div
-        className="flex items-center justify-between px-5 py-3 border-b"
-        style={{ borderColor: '#1A1A1A', background: '#141414' }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 18px',
+          borderBottom: '1px solid #1A1916',
+          background: '#0C0C0A',
+        }}
       >
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#C8102E', opacity: 0.8 }} />
-          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
-          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(201,168,76,0.6)' }} />
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#222220' }} />
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#222220' }} />
         </div>
-        <span className="text-[10px] font-mono tracking-widest" style={{ color: '#3A3A3A' }}>~/project-root</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#2A2926', letterSpacing: '0.15em' }}>
+          ~/project-root
+        </span>
         <div style={{ width: '44px' }} />
       </div>
 
-      <div className="p-6 min-h-[320px]" style={{ scrollbarWidth: 'none' }}>
-        {terminalLines.slice(0, visibleCount).map((line, i) => (
+      {/* Terminal body */}
+      <div style={{ padding: '20px 22px', minHeight: '300px' }}>
+        {terminalLines.slice(0, count).map((line, i) => (
           <div
             key={i}
-            className="text-[11px] font-mono leading-[1.85]"
             style={{
-              color: line.color || (line.prompt ? '#888' : '#444'),
-              animation: 'fadeIn 0.2s ease forwards',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              lineHeight: '1.9',
+              color: line.color || (line.prompt ? '#888580' : '#3A3835'),
+              animation: 'fadeIn 0.15s ease forwards',
             }}
           >
             {line.prompt && (
-              <span style={{ color: '#C8102E', marginRight: '8px' }}>$</span>
+              <span style={{ color: '#C9A84C', marginRight: '8px' }}>$</span>
             )}
-            <span style={{ color: line.prompt ? '#AAA' : undefined }}>
-              {line.text}
-            </span>
+            <span style={{ color: line.prompt ? '#BBB5AD' : undefined }}>{line.text}</span>
           </div>
         ))}
-        {/* Blinking cursor */}
-        {visibleCount > 0 && visibleCount < terminalLines.length && (
+        {count > 0 && count < terminalLines.length && (
           <span
-            className="inline-block w-2 h-3 ml-1 align-middle"
             style={{
-              background: '#C8102E',
-              animation: 'borderPulse 1s ease-in-out infinite',
-              opacity: 0.8,
+              display: 'inline-block',
+              width: '7px',
+              height: '14px',
+              background: 'rgba(201,168,76,0.7)',
+              animation: 'goldPulse 0.9s ease-in-out infinite',
+              verticalAlign: 'middle',
+              marginTop: '2px',
             }}
           />
         )}
-        {visibleCount === terminalLines.length && (
-          <div className="mt-3" style={{ color: '#C8102E', fontSize: '11px', fontFamily: 'var(--font-dm-mono)' }}>
-            <span style={{ color: '#3A3A3A' }}>$ </span>
-            <span style={{ animation: 'borderPulse 1.5s ease-in-out infinite', display: 'inline-block' }}>▊</span>
+        {count === terminalLines.length && (
+          <div style={{ marginTop: '10px', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+            <span style={{ color: '#C9A84C', marginRight: '8px' }}>$</span>
+            <span
+              style={{
+                display: 'inline-block',
+                width: '7px',
+                height: '13px',
+                background: 'rgba(201,168,76,0.5)',
+                animation: 'goldPulse 1.5s ease-in-out infinite',
+                verticalAlign: 'middle',
+              }}
+            />
           </div>
         )}
       </div>
@@ -96,47 +115,84 @@ function AnimatedTerminal({ active }: { active: boolean }) {
 }
 
 export default function About() {
-  const terminalRef = useRef<HTMLDivElement>(null)
-  const [terminalActive, setTerminalActive] = useState(false)
+  const termRef = useRef<HTMLDivElement>(null)
+  const [termActive, setTermActive] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTerminalActive(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.3 }
+      ([entry]) => { if (entry.isIntersecting) { setTermActive(true); observer.disconnect() } },
+      { threshold: 0.25 }
     )
-    const el = terminalRef.current
+    const el = termRef.current
     if (el) observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section id="about" className="py-40 px-8 border-t border-line bg-bg">
+    <section id="about" className="py-40 px-8 bg-bg" style={{ borderTop: '1px solid #1F1E1B' }}>
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
 
-          {/* Left */}
+        {/* Editorial statement — full width above the grid */}
+        <FadeIn>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '9px', color: 'rgba(201,168,76,0.5)', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '2rem' }}>
+            01 / About
+          </p>
+        </FadeIn>
+
+        <TextReveal delay={60}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 400,
+              fontStyle: 'italic',
+              fontSize: 'clamp(2.6rem, 5vw, 5rem)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              color: '#EEE9E1',
+              marginBottom: '1rem',
+              fontOpticalSizing: 'auto',
+            } as React.CSSProperties}
+          >
+            I own features
+          </h2>
+        </TextReveal>
+        <TextReveal delay={120}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 600,
+              fontSize: 'clamp(2.6rem, 5vw, 5rem)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              background: 'linear-gradient(135deg, #E8C46A 0%, #C9A84C 50%, #8A6D2C 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              marginBottom: '4rem',
+              fontOpticalSizing: 'auto',
+            } as React.CSSProperties}
+          >
+            start to finish.
+          </h2>
+        </TextReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+
+          {/* Left: text */}
           <div>
-            <FadeIn>
-              <p className="text-[10px] text-red tracking-[0.22em] uppercase mb-6 font-semibold">01 · About</p>
-            </FadeIn>
-
-            <TextReveal delay={60}>
-              <h2
-                className="font-serif font-semibold text-ink leading-[0.92] mb-10"
-                style={{ fontSize: 'clamp(3rem,5.5vw,5.5rem)', letterSpacing: '-0.04em' }}
+            <FadeIn delay={80}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px',
+                  fontSize: '0.94rem',
+                  lineHeight: '1.75',
+                  color: '#5E5A54',
+                  maxWidth: '440px',
+                  marginBottom: '3rem',
+                }}
               >
-                I own features<br />
-                <span className="gradient-text">start to finish.</span>
-              </h2>
-            </TextReveal>
-
-            <FadeIn delay={140}>
-              <div className="space-y-5 text-muted leading-relaxed text-[0.95rem] mb-12 max-w-md">
                 <p>
                   I design the database schema, write the FastAPI routes, build the React UI, wire Docker Compose, and deploy — as one cohesive system. Not just code features in isolation.
                 </p>
@@ -149,37 +205,42 @@ export default function About() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={220}>
-              <div className="flex gap-5">
-                <a
-                  href="https://github.com/satvikp29"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group text-[11px] tracking-[0.2em] uppercase text-red font-semibold flex items-center gap-1.5"
-                >
-                  <span className="border-b border-red/25 pb-0.5 group-hover:border-red transition-colors duration-400">GitHub</span>
-                  <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/satvikreddy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group text-[11px] tracking-[0.2em] uppercase text-red font-semibold flex items-center gap-1.5"
-                >
-                  <span className="border-b border-red/25 pb-0.5 group-hover:border-red transition-colors duration-400">LinkedIn</span>
-                  <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-                </a>
+            <FadeIn delay={160}>
+              <div style={{ display: 'flex', gap: '24px' }}>
+                {[
+                  { label: 'GitHub', href: 'https://github.com/satvikp29' },
+                  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/satvikreddy' },
+                ].map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group"
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C9A84C', textDecoration: 'none' }}
+                  >
+                    <span style={{ borderBottom: '1px solid rgba(201,168,76,0.25)', paddingBottom: '2px' }}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderBottomColor = '#C9A84C'}
+                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderBottomColor = 'rgba(201,168,76,0.25)'}
+                    >
+                      {label}
+                    </span>
+                    <span style={{ transition: 'transform 0.3s ease' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(2px,-2px)' }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(0,0)' }}
+                    >↗</span>
+                  </a>
+                ))}
               </div>
             </FadeIn>
           </div>
 
           {/* Right: animated terminal */}
           <FadeIn delay={100}>
-            <div ref={terminalRef}>
-              <AnimatedTerminal active={terminalActive} />
+            <div ref={termRef}>
+              <AnimatedTerminal active={termActive} />
             </div>
           </FadeIn>
-
         </div>
       </div>
     </section>

@@ -13,44 +13,71 @@ const items = [
   'real tests on real data',
 ]
 
+const DIAMOND = '◆'
+
 export default function Marquee() {
-  const doubled = [...items, ...items]
+  const doubled  = [...items, ...items]
+  const reversed = [...doubled].reverse()
 
   return (
-    <div className="relative overflow-hidden border-y border-line" style={{ background: '#F5F2EE' }}>
-      {/* Forward row */}
-      <div className="py-3.5 overflow-hidden">
+    <div
+      style={{
+        borderTop:    '1px solid #1F1E1B',
+        borderBottom: '1px solid #1F1E1B',
+        background:   '#0C0C0A',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Row 1 — forward */}
+      <div
+        style={{
+          padding: '14px 0',
+          overflow: 'hidden',
+          position: 'relative',
+          borderBottom: '1px solid rgba(31,30,27,0.6)',
+        }}
+      >
         <div
-          className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(90deg, #F5F2EE, transparent)' }}
+          style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: '80px', zIndex: 1,
+            background: 'linear-gradient(90deg, #0C0C0A, transparent)',
+            pointerEvents: 'none',
+          }}
         />
         <div
-          className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(-90deg, #F5F2EE, transparent)' }}
+          style={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: '80px', zIndex: 1,
+            background: 'linear-gradient(-90deg, #0C0C0A, transparent)',
+            pointerEvents: 'none',
+          }}
         />
         <div
-          className="flex gap-10 whitespace-nowrap"
-          style={{ animation: 'marquee 60s linear infinite' }}
+          style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'marquee 65s linear infinite' }}
         >
           {doubled.map((item, i) => (
-            <span key={i} className="flex items-center gap-10 text-[10px] tracking-[0.22em] uppercase font-semibold">
-              <span className="text-muted">{item}</span>
-              <span style={{ color: 'rgba(200,16,46,0.3)', fontSize: '7px' }}>◆</span>
+            <span
+              key={i}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '40px', fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase' }}
+            >
+              <span style={{ color: '#3A3835' }}>{item}</span>
+              <span style={{ color: 'rgba(201,168,76,0.2)', fontSize: '7px' }}>{DIAMOND}</span>
             </span>
           ))}
         </div>
       </div>
 
-      {/* Reverse row */}
-      <div className="py-3.5 border-t border-line/60 overflow-hidden">
+      {/* Row 2 — reverse */}
+      <div style={{ padding: '14px 0', overflow: 'hidden' }}>
         <div
-          className="flex gap-10 whitespace-nowrap"
-          style={{ animation: 'marqueeReverse 50s linear infinite' }}
+          style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'marqueeReverse 52s linear infinite' }}
         >
-          {[...doubled].reverse().map((item, i) => (
-            <span key={i} className="flex items-center gap-10 text-[10px] tracking-[0.22em] uppercase font-semibold">
-              <span style={{ color: '#B8B0A6' }}>{item}</span>
-              <span style={{ color: 'rgba(200,16,46,0.15)', fontSize: '7px' }}>◆</span>
+          {reversed.map((item, i) => (
+            <span
+              key={i}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '40px', fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase' }}
+            >
+              <span style={{ color: '#2A2826' }}>{item}</span>
+              <span style={{ color: 'rgba(201,168,76,0.1)', fontSize: '7px' }}>{DIAMOND}</span>
             </span>
           ))}
         </div>

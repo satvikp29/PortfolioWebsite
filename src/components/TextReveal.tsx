@@ -34,7 +34,7 @@ export default function TextReveal({
   }, [])
 
   return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
+    <div ref={ref} className={`overflow-hidden ${className}`} style={{ paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
       <Tag
         style={{
           display: Tag === 'span' ? 'block' : undefined,

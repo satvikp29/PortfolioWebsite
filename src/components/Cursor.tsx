@@ -2,34 +2,28 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 
-type CursorState = 'default' | 'link' | 'view' | 'text'
+type CursorState = 'default' | 'link' | 'view'
 
 export default function Cursor() {
-  const dotRef = useRef<HTMLDivElement>(null)
+  const dotRef  = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
-  const labelRef = useRef<HTMLSpanElement>(null)
-  const mouse = useRef({ x: -200, y: -200 })
-  const ring = useRef({ x: -200, y: -200 })
-  const rafId = useRef<number>(0)
-  const [cursorState, setCursorState] = useState<CursorState>('default')
+  const mouse   = useRef({ x: -300, y: -300 })
+  const ring    = useRef({ x: -300, y: -300 })
+  const rafId   = useRef<number>(0)
+  const [state,   setState]   = useState<CursorState>('default')
   const [visible, setVisible] = useState(false)
 
   const animate = useCallback(() => {
-    const ease = 0.11
-    ring.current.x += (mouse.current.x - ring.current.x) * ease
-    ring.current.y += (mouse.current.y - ring.current.y) * ease
-
-    if (dotRef.current) {
-      dotRef.current.style.transform = `translate(${mouse.current.x}px, ${mouse.current.y}px) translate(-50%, -50%)`
-    }
-    if (ringRef.current) {
-      ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%, -50%)`
-    }
+    ring.current.x += (mouse.current.x - ring.current.x) * 0.1
+    ring.current.y += (mouse.current.y - ring.current.y) * 0.1
+    if (dotRef.current)
+      dotRef.current.style.transform  = `translate(${mouse.current.x}px, ${mouse.current.y}px) translate(-50%,-50%)`
+    if (ringRef.current)
+      ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%,-50%)`
     rafId.current = requestAnimationFrame(animate)
   }, [])
 
   useEffect(() => {
-    // Only show on pointer-fine (mouse) devices
     if (typeof window === 'undefined') return
     if (window.matchMedia('(pointer: coarse)').matches) return
 
@@ -37,42 +31,29 @@ export default function Cursor() {
       mouse.current = { x: e.clientX, y: e.clientY }
       if (!visible) setVisible(true)
     }
-
-    const onLeave = () => setVisible(false)
-    const onEnter = () => setVisible(true)
-
     const onOver = (e: MouseEvent) => {
-      const el = e.target as HTMLElement
-      const interactive = el.closest('a, button, [data-cursor]')
-      if (!interactive) {
-        setCursorState('default')
-        return
-      }
-      const attr = (interactive as HTMLElement).getAttribute('data-cursor')
-      if (attr === 'view') setCursorState('view')
-      else setCursorState('link')
+      const el = (e.target as HTMLElement).closest('a, button, [data-cursor]')
+      if (!el) { setState('default'); return }
+      const attr = (el as HTMLElement).getAttribute('data-cursor')
+      setState(attr === 'view' ? 'view' : 'link')
     }
 
-    document.addEventListener('mousemove', onMove, { passive: true })
-    document.documentElement.addEventListener('mouseleave', onLeave)
-    document.documentElement.addEventListener('mouseenter', onEnter)
-    document.addEventListener('mouseover', onOver, { passive: true })
-
+    document.addEventListener('mousemove',  onMove, { passive: true })
+    document.addEventListener('mouseover',  onOver, { passive: true })
+    document.documentElement.addEventListener('mouseleave', () => setVisible(false))
+    document.documentElement.addEventListener('mouseenter', () => setVisible(true))
     rafId.current = requestAnimationFrame(animate)
 
     return () => {
       document.removeEventListener('mousemove', onMove)
-      document.documentElement.removeEventListener('mouseleave', onLeave)
-      document.documentElement.removeEventListener('mouseenter', onEnter)
       document.removeEventListener('mouseover', onOver)
       cancelAnimationFrame(rafId.current)
     }
   }, [animate, visible])
 
-  const isView = cursorState === 'view'
-  const isLink = cursorState === 'link'
-
-  const ringSize = isView ? 80 : isLink ? 52 : 40
+  const isView = state === 'view'
+  const isLink = state === 'link'
+  const ringSize = isView ? 76 : isLink ? 48 : 38
 
   return (
     <>
@@ -81,37 +62,35 @@ export default function Cursor() {
         ref={ringRef}
         aria-hidden="true"
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: ringSize,
-          height: ringSize,
-          borderRadius: '50%',
-          border: `1px solid ${isView ? 'rgba(200,16,46,0.85)' : 'rgba(200,16,46,0.45)'}`,
-          backgroundColor: isView ? 'rgba(200,16,46,0.06)' : 'transparent',
-          pointerEvents: 'none',
-          zIndex: 9998,
-          opacity: visible ? 1 : 0,
-          transition:
-            'width 0.35s cubic-bezier(0.65,0.05,0,1), height 0.35s cubic-bezier(0.65,0.05,0,1), background-color 0.3s ease, border-color 0.3s ease, opacity 0.4s ease',
-          willChange: 'transform',
-          display: 'flex',
-          alignItems: 'center',
+          position:       'fixed',
+          top: 0, left: 0,
+          width:          ringSize,
+          height:         ringSize,
+          borderRadius:   '50%',
+          border:         `1px solid ${isView ? 'rgba(201,168,76,0.85)' : 'rgba(201,168,76,0.4)'}`,
+          backgroundColor: isView ? 'rgba(201,168,76,0.05)' : 'transparent',
+          pointerEvents:  'none',
+          zIndex:         9998,
+          opacity:        visible ? 1 : 0,
+          display:        'flex',
+          alignItems:     'center',
           justifyContent: 'center',
+          transition:
+            'width 0.3s cubic-bezier(0.65,0.05,0,1), height 0.3s cubic-bezier(0.65,0.05,0,1), background-color 0.25s ease, border-color 0.25s ease, opacity 0.35s ease',
+          willChange: 'transform',
         }}
       >
         <span
-          ref={labelRef}
           style={{
-            fontFamily: 'var(--font-syne)',
-            fontSize: '9px',
+            fontFamily:    'var(--font-sans)',
+            fontSize:      '8px',
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
-            color: '#C8102E',
-            fontWeight: 700,
-            opacity: isView ? 1 : 0,
-            transition: 'opacity 0.2s ease',
-            userSelect: 'none',
+            color:         '#C9A84C',
+            fontWeight:    700,
+            opacity:       isView ? 1 : 0,
+            transition:    'opacity 0.2s ease',
+            userSelect:    'none',
           }}
         >
           View
@@ -123,18 +102,17 @@ export default function Cursor() {
         ref={dotRef}
         aria-hidden="true"
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: isLink ? 0 : 5,
-          height: isLink ? 0 : 5,
-          borderRadius: '50%',
-          backgroundColor: '#C8102E',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          opacity: visible ? 1 : 0,
-          transition: 'width 0.25s ease, height 0.25s ease, opacity 0.3s ease',
-          willChange: 'transform',
+          position:        'fixed',
+          top: 0, left: 0,
+          width:           isLink ? 0 : 5,
+          height:          isLink ? 0 : 5,
+          borderRadius:    '50%',
+          backgroundColor: '#C9A84C',
+          pointerEvents:   'none',
+          zIndex:          9999,
+          opacity:         visible ? 1 : 0,
+          transition:      'width 0.2s ease, height 0.2s ease, opacity 0.3s ease',
+          willChange:      'transform',
         }}
       />
     </>

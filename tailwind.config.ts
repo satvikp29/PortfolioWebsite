@@ -9,52 +9,62 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: '#FAFAF8',
-        surface: '#F2EFEB',
-        card: '#E9E5E0',
-        'card-hover': '#E0DBD5',
-        red: {
-          DEFAULT: '#C8102E',
-          light: '#E51A38',
-          dim: '#8A0A20',
-          subtle: 'rgba(200,16,46,0.07)',
-          border: 'rgba(200,16,46,0.2)',
-        },
-        ink: '#111111',
-        muted: '#8A8070',
-        dim: '#C0B8B0',
+        bg:      '#090907',
+        surface: '#0F0F0D',
+        card:    '#161613',
+        ink:     '#EEE9E1',
+        muted:   '#5E5A54',
+        dim:     '#312F2C',
         line: {
-          DEFAULT: '#E0DBD5',
-          light: '#EBE7E2',
+          DEFAULT: '#1F1E1B',
+          2:       '#2A2926',
         },
+        gold: {
+          DEFAULT: '#C9A84C',
+          bright:  '#E8C46A',
+          dim:     '#8A6D2C',
+          subtle:  'rgba(201,168,76,0.07)',
+          border:  'rgba(201,168,76,0.18)',
+        },
+        // red aliased to gold so existing classes don't break
+        red: {
+          DEFAULT: '#C9A84C',
+          light:   '#E8C46A',
+          dim:     '#8A6D2C',
+          subtle:  'rgba(201,168,76,0.07)',
+          border:  'rgba(201,168,76,0.18)',
+        },
+        ember: '#D45A2A',
       },
       fontFamily: {
-        sans: ['var(--font-syne)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
-        mono: ['var(--font-dm-mono)', 'Menlo', 'monospace'],
+        sans:    ['var(--font-sans)',    'system-ui', 'sans-serif'],
+        serif:   ['var(--font-display)', 'Georgia',   'serif'],
+        display: ['var(--font-display)', 'Georgia',   'serif'],
+        mono:    ['var(--font-mono)',    'Menlo',      'monospace'],
       },
       backgroundImage: {
-        'red-shimmer':
-          'linear-gradient(105deg, transparent 35%, rgba(200,16,46,0.06) 50%, transparent 65%)',
-        'red-gradient':
-          'linear-gradient(135deg, #E51A38 0%, #C8102E 50%, #8A0A20 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #E8C46A 0%, #C9A84C 50%, #8A6D2C 100%)',
       },
       animation: {
-        marquee: 'marquee 40s linear infinite',
-        'fade-up': 'fadeUp 0.85s cubic-bezier(0.65, 0.05, 0, 1) forwards',
+        marquee:        'marquee 65s linear infinite',
+        marqueeReverse: 'marqueeReverse 52s linear infinite',
+        dataFlow:       'dataFlow 2.8s ease-in-out infinite',
+        fadeUp:         'fadeUp 0.85s cubic-bezier(0.65,0.05,0,1) forwards',
       },
       keyframes: {
-        marquee: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        marquee:        { '0%': { transform: 'translateX(0)' },       '100%': { transform: 'translateX(-50%)' } },
+        marqueeReverse: { '0%': { transform: 'translateX(-50%)' },    '100%': { transform: 'translateX(0)' } },
+        fadeUp:         { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        dataFlow: {
+          '0%':   { left: '0%',              opacity: '0' },
+          '5%':   { opacity: '1' },
+          '95%':  { opacity: '1' },
+          '100%': { left: 'calc(100% - 32px)', opacity: '0' },
         },
       },
       transitionTimingFunction: {
         luxury: 'cubic-bezier(0.65, 0.05, 0, 1)',
+        spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
     },
   },

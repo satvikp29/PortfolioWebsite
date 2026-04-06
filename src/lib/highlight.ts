@@ -21,23 +21,24 @@ export function highlight(code: string, lang: 'python' | 'typescript'): string {
     .split('\n')
     .map((line) => {
       const trimmed = line.trim()
+      // Comments
       if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
-        return `<span style="color:#3A3030;font-style:italic">${escapeHtml(line)}</span>`
+        return `<span style="color:#2E2C2A;font-style:italic">${escapeHtml(line)}</span>`
       }
       let r = escapeHtml(line)
-      // strings
-      r = r.replace(/(&quot;[^&]*&quot;)/g, '<span style="color:#7A6060">$1</span>')
-      r = r.replace(/(&#39;[^&]*&#39;)/g, '<span style="color:#7A6060">$1</span>')
-      // decorators
-      r = r.replace(/(@\w+)/g, '<span style="color:#C8102E">$1</span>')
-      // keywords
-      keywords.forEach((kw) => {
+      // Strings
+      r = r.replace(/(&quot;[^&]*&quot;)/g, '<span style="color:#6B7C5C">$1</span>')
+      r = r.replace(/(&#39;[^&]*&#39;)/g,   '<span style="color:#6B7C5C">$1</span>')
+      // Decorators
+      r = r.replace(/(@\w+)/g, '<span style="color:#E8C46A">$1</span>')
+      // Keywords — gold
+      keywords.forEach(kw => {
         r = r.replace(
           new RegExp(`\\b(${kw})\\b`, 'g'),
-          '<span style="color:#C8102E">$1</span>'
+          '<span style="color:#C9A84C">$1</span>'
         )
       })
-      return `<span style="color:#888080">${r}</span>`
+      return `<span style="color:#6B6560">${r}</span>`
     })
     .join('\n')
 }

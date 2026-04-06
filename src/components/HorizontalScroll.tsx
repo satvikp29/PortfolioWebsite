@@ -10,9 +10,9 @@ const projects = [
     impact: 'Scores job postings against a resume in real time — so job seekers stop applying blind.',
     arch: ['Next.js', 'FastAPI', 'OpenAI', 'PostgreSQL'],
     decisions: [
-      { id: '01', label: 'asyncio.gather', detail: 'All job scoring runs in parallel. One await instead of a sequential loop — latency drops with scale.' },
+      { id: '01', label: 'asyncio.gather',    detail: 'All job scoring runs in parallel. One await instead of a sequential loop — latency drops with scale.' },
       { id: '02', label: 'Pydantic as contract', detail: 'Same model used for DB validation and as the structured output spec sent to OpenAI.' },
-      { id: '03', label: 'tsvector index', detail: 'Postgres full-text search on job titles and descriptions. No Elasticsearch needed.' },
+      { id: '03', label: 'tsvector index',    detail: 'Postgres full-text search on job titles and descriptions. No Elasticsearch needed.' },
     ],
     github: 'https://github.com/satvikp29/CareerCompass',
     filename: 'routes/jobs.py',
@@ -43,8 +43,8 @@ async def match_jobs(
     impact: 'Run test cases across multiple models at once. GPT-4o judges every response on accuracy, relevance, and hallucination risk.',
     arch: ['Next.js', 'FastAPI', 'OpenAI', 'SQLite'],
     decisions: [
-      { id: '01', label: 'LLM-as-judge', detail: 'GPT-4o evaluates with response_format: json_object — scores are structured, not free-form text.' },
-      { id: '02', label: 'Parallel eval', detail: 'All model calls run concurrently via asyncio.gather. Results arrive in one batch, not one at a time.' },
+      { id: '01', label: 'LLM-as-judge',   detail: 'GPT-4o evaluates with response_format: json_object — scores are structured, not free-form text.' },
+      { id: '02', label: 'Parallel eval',  detail: 'All model calls run concurrently via asyncio.gather. Results arrive in one batch, not one at a time.' },
       { id: '03', label: 'SQLite intentional', detail: 'Zero setup, single file. Schema is identical to Postgres — one line to swap when scale demands it.' },
     ],
     github: 'https://github.com/satvikp29/EvaluateAI',
@@ -77,9 +77,9 @@ async def match_jobs(
     impact: 'Reviews pull requests with full repo context — so suggestions are relevant to your codebase, not generic.',
     arch: ['Next.js', 'FastAPI', 'GitHub API', 'OpenAI'],
     decisions: [
-      { id: '01', label: 'Token budget', detail: 'Context manager trims repo files to 4k tokens before the prompt is built — no silent truncation mid-review.' },
+      { id: '01', label: 'Token budget',    detail: 'Context manager trims repo files to 4k tokens before the prompt is built — no silent truncation mid-review.' },
       { id: '02', label: 'unidiff parsing', detail: 'Only changed hunks are sent. Unchanged context is stripped to reduce noise and stay within limits.' },
-      { id: '03', label: 'Streaming', detail: 'Completions stream line by line to the client. Review appears as it generates, not after a 15s wait.' },
+      { id: '03', label: 'Streaming',       detail: 'Completions stream line by line to the client. Review appears as it generates, not after a 15s wait.' },
     ],
     github: 'https://github.com/satvikp29/CodePilot',
     filename: 'lib/reviewer.ts',
@@ -114,8 +114,8 @@ async def match_jobs(
     arch: ['Next.js', 'FastAPI', 'PostgreSQL', 'Docker'],
     decisions: [
       { id: '01', label: 'inArray batch query', detail: 'Single Drizzle query with inArray instead of per-vendor fetches. Eliminates N+1 on every dashboard load.' },
-      { id: '02', label: 'Weighted severity', detail: 'Alert score is weighted across lead time, current stock, and reorder point — not a simple threshold.' },
-      { id: '03', label: 'DB healthcheck', detail: 'Compose healthcheck blocks the API container from starting until Postgres is accepting connections.' },
+      { id: '02', label: 'Weighted severity',   detail: 'Alert score is weighted across lead time, current stock, and reorder point — not a simple threshold.' },
+      { id: '03', label: 'DB healthcheck',      detail: 'Compose healthcheck blocks the API container from starting until Postgres is accepting connections.' },
     ],
     github: 'https://github.com/satvikp29/SupplyChainSync',
     filename: 'api/dashboard.ts',
@@ -146,35 +146,23 @@ async def match_jobs(
   },
 ]
 
-function TiltCard({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+function TiltCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
-
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current
-    if (!el) return
+    const el = ref.current; if (!el) return
     const rect = el.getBoundingClientRect()
-    const cx = rect.left + rect.width / 2
-    const cy = rect.top + rect.height / 2
-    const dx = (e.clientX - cx) / (rect.width / 2)
-    const dy = (e.clientY - cy) / (rect.height / 2)
-    el.style.transform = `perspective(900px) rotateX(${-dy * 3}deg) rotateY(${dx * 4}deg) scale(1.01)`
+    const dx = (e.clientX - (rect.left + rect.width  / 2)) / (rect.width  / 2)
+    const dy = (e.clientY - (rect.top  + rect.height / 2)) / (rect.height / 2)
+    el.style.transform = `perspective(900px) rotateX(${-dy * 2.5}deg) rotateY(${dx * 3.5}deg) scale(1.008)`
   }, [])
-
   const onMouseLeave = useCallback(() => {
-    const el = ref.current
-    if (!el) return
+    const el = ref.current; if (!el) return
     el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)'
   }, [])
-
   return (
     <div
       ref={ref}
-      className={className}
-      style={{
-        ...style,
-        transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        willChange: 'transform',
-      }}
+      style={{ ...style, transition: 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)', willChange: 'transform' }}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
@@ -184,8 +172,8 @@ function TiltCard({ children, className, style }: { children: React.ReactNode; c
 }
 
 export default function HorizontalScroll() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
+  const containerRef   = useRef<HTMLDivElement>(null)
+  const trackRef       = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const [currentPanel, setCurrentPanel] = useState(0)
   const numPanels = projects.length
@@ -197,84 +185,89 @@ export default function HorizontalScroll() {
       rafId = requestAnimationFrame(() => {
         if (!containerRef.current || !trackRef.current) return
         const rect = containerRef.current.getBoundingClientRect()
-        const scrollableHeight = containerRef.current.offsetHeight - window.innerHeight
-        const scrolled = Math.max(0, -rect.top)
-        const p = Math.min(scrolled / scrollableHeight, 1)
-        const tx = p * (numPanels - 1) * 100
-        trackRef.current.style.transform = `translateX(-${tx}vw)`
-        if (progressBarRef.current) {
-          progressBarRef.current.style.width = `${p * 100}%`
-        }
+        const scrollable = containerRef.current.offsetHeight - window.innerHeight
+        const scrolled   = Math.max(0, -rect.top)
+        const p = Math.min(scrolled / scrollable, 1)
+        trackRef.current.style.transform = `translateX(-${p * (numPanels - 1) * 100}vw)`
+        if (progressBarRef.current) progressBarRef.current.style.width = `${p * 100}%`
         const panel = Math.round(p * (numPanels - 1))
-        setCurrentPanel((prev) => (prev !== panel ? panel : prev))
+        setCurrentPanel(prev => prev !== panel ? panel : prev)
       })
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      cancelAnimationFrame(rafId)
-    }
+    return () => { window.removeEventListener('scroll', handleScroll); cancelAnimationFrame(rafId) }
   }, [numPanels])
 
   return (
     <div
       ref={containerRef}
       id="projects"
-      style={{ height: `${numPanels * 100}vh` }}
-      className="relative border-t border-line"
+      style={{ height: `${numPanels * 100}vh`, position: 'relative', borderTop: '1px solid #1F1E1B' }}
     >
-      <div className="sticky top-0 h-screen overflow-hidden bg-bg">
+      <div className="sticky top-0 h-screen overflow-hidden" style={{ background: '#090907' }}>
 
-        {/* Section label + counter */}
-        <div className="absolute top-8 left-8 z-20 flex items-center gap-6">
-          <p className="text-[10px] text-red tracking-[0.22em] uppercase font-semibold">02 · Projects</p>
-          <span className="text-[10px] text-muted font-mono tracking-widest">
+        {/* Label + counter */}
+        <div style={{ position: 'absolute', top: '32px', left: '32px', zIndex: 20, display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '9px', color: 'rgba(201,168,76,0.5)', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700 }}>
+            02 / Projects
+          </p>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#3A3835', letterSpacing: '0.2em' }}>
             {String(currentPanel + 1).padStart(2, '0')} / {String(numPanels).padStart(2, '0')}
           </span>
         </div>
 
-        {/* Panel indicators */}
-        <div className="absolute top-8 right-8 z-20 flex gap-2 items-center">
+        {/* Panel dots */}
+        <div style={{ position: 'absolute', top: '32px', right: '32px', zIndex: 20, display: 'flex', gap: '8px', alignItems: 'center' }}>
           {projects.map((_, i) => (
             <div
               key={i}
-              className="transition-all duration-700"
               style={{
-                width: i === currentPanel ? '32px' : '6px',
+                width: i === currentPanel ? '30px' : '6px',
                 height: '2px',
-                background: i === currentPanel ? '#C8102E' : '#D8D3CE',
+                background: i === currentPanel ? '#C9A84C' : '#2A2926',
                 borderRadius: '1px',
+                transition: 'width 0.6s cubic-bezier(0.65,0.05,0,1), background 0.4s ease',
               }}
             />
           ))}
         </div>
 
-        {/* Sliding track */}
+        {/* Track */}
         <div
           ref={trackRef}
-          className="flex h-full"
-          style={{ width: `${numPanels * 100}vw`, willChange: 'transform', transition: 'transform 0.05s linear' }}
+          style={{ display: 'flex', height: '100%', width: `${numPanels * 100}vw`, willChange: 'transform' }}
         >
           {projects.map((project, panelIndex) => {
+            const isActive   = panelIndex === currentPanel
             const highlighted = highlight(project.code, project.lang)
-            const isActive = panelIndex === currentPanel
-            return (
-              <div key={project.name} className="w-screen h-full shrink-0 flex">
 
-                {/* Left: project case study with 3D tilt */}
+            return (
+              <div key={project.name} style={{ width: '100vw', height: '100%', flexShrink: 0, display: 'flex' }}>
+
+                {/* Left — tilt card */}
                 <TiltCard
-                  className="w-1/2 flex flex-col justify-center px-16 py-20 border-r border-line bg-bg"
-                  style={{}}
+                  style={{
+                    width: '50%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '0 4rem',
+                    borderRight: '1px solid #1F1E1B',
+                    background: '#090907',
+                  }}
                 >
                   {/* Watermark number */}
                   <span
-                    className="font-serif leading-none mb-2 select-none"
+                    aria-hidden="true"
                     style={{
-                      fontSize: '110px',
-                      color: isActive ? 'rgba(200,16,46,0.09)' : 'rgba(200,16,46,0.05)',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '120px',
                       fontWeight: 700,
                       lineHeight: 1,
+                      color: isActive ? 'rgba(201,168,76,0.07)' : 'rgba(201,168,76,0.03)',
+                      marginBottom: '-12px',
+                      userSelect: 'none',
                       transition: 'color 0.8s ease',
                     }}
                   >
@@ -283,72 +276,97 @@ export default function HorizontalScroll() {
 
                   {/* Impact */}
                   <p
-                    className="text-ink font-serif font-semibold leading-snug mb-5 -mt-4 max-w-sm"
                     style={{
-                      fontSize: 'clamp(1.1rem,1.6vw,1.4rem)',
-                      letterSpacing: '-0.015em',
-                      opacity: isActive ? 1 : 0.7,
-                      transform: isActive ? 'translateY(0)' : 'translateY(6px)',
+                      fontFamily: 'var(--font-display)',
+                      fontStyle: 'italic',
+                      fontSize: 'clamp(1rem, 1.5vw, 1.3rem)',
+                      color: '#5E5A54',
+                      letterSpacing: '-0.01em',
+                      lineHeight: 1.4,
+                      marginBottom: '20px',
+                      maxWidth: '380px',
+                      opacity: isActive ? 1 : 0.5,
+                      transform: isActive ? 'translateY(0)' : 'translateY(8px)',
                       transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.65,0.05,0,1)',
                     }}
                   >
                     {project.impact}
                   </p>
 
-                  {/* Name + tagline */}
+                  {/* Name */}
                   <h3
-                    className="font-serif font-semibold text-ink mb-1"
                     style={{
-                      fontSize: 'clamp(2.4rem,3.5vw,3.8rem)',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'clamp(2.6rem, 4vw, 4.2rem)',
+                      fontWeight: 600,
+                      color: '#EEE9E1',
                       letterSpacing: '-0.03em',
-                      lineHeight: 1,
-                      opacity: isActive ? 1 : 0.6,
+                      lineHeight: 0.95,
+                      marginBottom: '6px',
+                      opacity: isActive ? 1 : 0.5,
                       transition: 'opacity 0.7s ease 0.05s',
-                    }}
+                      fontOpticalSizing: 'auto',
+                    } as React.CSSProperties}
                   >
                     {project.name}
                   </h3>
-                  <p className="text-[10px] text-red/60 tracking-[0.2em] uppercase mb-7 font-semibold">{project.tagline}</p>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '9px',
+                      color: 'rgba(201,168,76,0.4)',
+                      letterSpacing: '0.22em',
+                      textTransform: 'uppercase',
+                      fontWeight: 700,
+                      marginBottom: '24px',
+                    }}
+                  >
+                    {project.tagline}
+                  </p>
 
-                  {/* Architecture flow */}
-                  <div className="flex items-center gap-1 mb-7 flex-wrap">
+                  {/* Arch flow */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '24px', flexWrap: 'wrap' }}>
                     {project.arch.map((node, i) => (
-                      <span key={node} className="flex items-center gap-1">
+                      <span key={node} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <span
-                          className="text-[10px] font-mono px-2.5 py-1 border text-ink"
                           style={{
-                            background: '#F4F1EE',
-                            borderColor: '#D8D3CE',
-                            transition: 'border-color 0.4s ease, color 0.4s ease',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '10px',
+                            padding: '3px 10px',
+                            border: '1px solid #1F1E1B',
+                            background: '#0F0F0D',
+                            color: '#5E5A54',
                           }}
                         >
                           {node}
                         </span>
                         {i < project.arch.length - 1 && (
-                          <span className="text-dim text-[10px] select-none">→</span>
+                          <span style={{ color: '#2A2926', fontSize: '10px' }}>→</span>
                         )}
                       </span>
                     ))}
                   </div>
 
-                  {/* Engineering decisions */}
-                  <div className="space-y-3.5 mb-8">
+                  {/* Decisions */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '28px' }}>
                     {project.decisions.map((d, di) => (
                       <div
                         key={d.id}
-                        className="flex gap-3 items-start"
                         style={{
+                          display: 'flex',
+                          gap: '12px',
+                          alignItems: 'flex-start',
                           opacity: isActive ? 1 : 0,
-                          transform: isActive ? 'translateX(0)' : 'translateX(-12px)',
-                          transition: `opacity 0.6s ease ${0.1 + di * 0.07}s, transform 0.6s cubic-bezier(0.65,0.05,0,1) ${0.1 + di * 0.07}s`,
+                          transform: isActive ? 'translateX(0)' : 'translateX(-14px)',
+                          transition: `opacity 0.55s ease ${0.12 + di * 0.07}s, transform 0.55s cubic-bezier(0.65,0.05,0,1) ${0.12 + di * 0.07}s`,
                         }}
                       >
-                        <span className="font-mono text-[9px] text-red/40 shrink-0 mt-0.5 tracking-widest">
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', color: 'rgba(201,168,76,0.3)', flexShrink: 0, marginTop: '2px', letterSpacing: '0.1em' }}>
                           {d.id}.
                         </span>
                         <div>
-                          <span className="text-xs font-mono text-ink font-medium mr-2">{d.label}</span>
-                          <span className="text-xs text-muted leading-relaxed">{d.detail}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#BBB5AD', fontWeight: 500, marginRight: '8px' }}>{d.label}</span>
+                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: '#5E5A54', lineHeight: 1.6 }}>{d.detail}</span>
                         </div>
                       </div>
                     ))}
@@ -359,49 +377,66 @@ export default function HorizontalScroll() {
                     target="_blank"
                     rel="noopener noreferrer"
                     data-cursor="view"
-                    className="group text-xs text-ink font-semibold tracking-wide w-fit flex items-center gap-1.5"
+                    className="group"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C9A84C', textDecoration: 'none', width: 'fit-content' }}
                   >
-                    <span className="border-b border-red/25 pb-0.5 group-hover:border-red group-hover:text-red transition-all duration-300">
+                    <span
+                      style={{ borderBottom: '1px solid rgba(201,168,76,0.25)', paddingBottom: '2px', transition: 'border-color 0.3s ease' }}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderBottomColor = '#C9A84C'}
+                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderBottomColor = 'rgba(201,168,76,0.25)'}
+                    >
                       View on GitHub
                     </span>
-                    <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-red">↗</span>
+                    <span>↗</span>
                   </a>
                 </TiltCard>
 
-                {/* Right: code block */}
+                {/* Right — code */}
                 <div
-                  className="w-1/2 flex items-center justify-center px-14"
                   style={{
-                    background: '#EDECE8',
-                    transition: 'background 0.8s ease',
+                    width: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0 3.5rem',
+                    background: '#0C0C0A',
                   }}
                 >
-                  <div className="w-full max-w-lg">
-                    <p className="text-[10px] font-mono mb-3 tracking-widest" style={{ color: '#999' }}>
+                  <div style={{ width: '100%', maxWidth: '520px' }}>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#2A2926', letterSpacing: '0.18em', marginBottom: '10px' }}>
                       {project.note}
                     </p>
                     <div
                       style={{
-                        border: '1px solid #1C1C1C',
-                        background: '#0C0C0C',
-                        boxShadow: isActive ? '0 32px 80px rgba(0,0,0,0.25), 0 8px 24px rgba(200,16,46,0.08)' : '0 8px 24px rgba(0,0,0,0.12)',
+                        border: '1px solid #1A1916',
+                        background: '#080806',
+                        boxShadow: isActive
+                          ? '0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(201,168,76,0.06)'
+                          : '0 8px 24px rgba(0,0,0,0.3)',
                         transition: 'box-shadow 0.8s cubic-bezier(0.65,0.05,0,1)',
                       }}
                     >
                       <div
-                        className="flex items-center gap-2 px-4 py-3 border-b"
-                        style={{ borderColor: '#1C1C1C', background: '#141414' }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 16px',
+                          borderBottom: '1px solid #1A1916',
+                          background: '#0C0C0A',
+                        }}
                       >
-                        <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#C8102E', opacity: 0.7 }} />
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#2A2A2A' }} />
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(201,168,76,0.55)' }} />
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1F1E1B' }} />
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1F1E1B' }} />
                         </div>
-                        <span className="text-[10px] font-mono ml-2" style={{ color: '#555' }}>{project.filename}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#3A3835', marginLeft: '6px' }}>
+                          {project.filename}
+                        </span>
                       </div>
                       <pre
-                        className="p-5 text-[11px] font-mono leading-[1.8] overflow-x-auto"
-                        style={{ scrollbarWidth: 'none' }}
+                        style={{ padding: '20px', fontFamily: 'var(--font-mono)', fontSize: '11px', lineHeight: 1.8, overflowX: 'auto', scrollbarWidth: 'none' } as React.CSSProperties}
                       >
                         <code dangerouslySetInnerHTML={{ __html: highlighted }} />
                       </pre>
@@ -415,14 +450,14 @@ export default function HorizontalScroll() {
         </div>
 
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: '#E8E4E0' }}>
+        <div
+          style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: '#1F1E1B' }}
+        >
           <div
             ref={progressBarRef}
-            className="h-full transition-none"
-            style={{ width: '0%', background: 'linear-gradient(90deg, #8A0A20, #C8102E)' }}
+            style={{ height: '100%', width: '0%', background: 'linear-gradient(90deg, #8A6D2C, #C9A84C)' }}
           />
         </div>
-
       </div>
     </div>
   )

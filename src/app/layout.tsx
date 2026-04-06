@@ -1,25 +1,27 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Syne, DM_Mono } from 'next/font/google'
+import { Fraunces, Bricolage_Grotesque, DM_Mono } from 'next/font/google'
 import Cursor from '@/components/Cursor'
+import SpotlightProvider from '@/components/SpotlightProvider'
 import './globals.css'
 
-const syne = Syne({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-syne',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-display',
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
   display: 'swap',
 })
 
-const cormorant = Cormorant_Garamond({
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-cormorant',
-  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
+  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
 })
 
 const dmMono = DM_Mono({
   subsets: ['latin'],
-  variable: '--font-dm-mono',
+  variable: '--font-mono',
   weight: ['300', '400', '500'],
   display: 'swap',
 })
@@ -38,8 +40,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${syne.variable} ${cormorant.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${bricolage.variable} ${dmMono.variable}`}>
       <body>
+        <SpotlightProvider />
         <Cursor />
         <div className="grain-overlay" aria-hidden="true" />
         {children}
