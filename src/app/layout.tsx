@@ -27,11 +27,11 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Satvik Reddy Parvathareddy — Full Stack Developer · Dallas, TX',
+  title: 'Satvik Reddy Parvathareddy — Full Stack Developer',
   description:
     'Full stack developer based in Dallas, TX. Python, TypeScript, and AI powered applications built end to end.',
   openGraph: {
-    title: 'Satvik Reddy Parvathareddy — Full Stack Developer · Dallas, TX',
+    title: 'Satvik Reddy Parvathareddy — Full Stack Developer',
     description:
       'Full stack developer based in Dallas, TX. Python, TypeScript, and AI powered applications.',
     type: 'website',

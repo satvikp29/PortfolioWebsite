@@ -8,26 +8,26 @@ export default function Icon() {
     (
       <div
         style={{
-          background: '#FFFFFF',
+          background: '#090907',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          border: '1.5px solid #C8102E',
-          borderRadius: '4px',
+          border: '1px solid #C9A84C',
+          borderRadius: '3px',
         }}
       >
         <span
           style={{
-            color: '#C8102E',
-            fontSize: '11px',
+            color: '#C9A84C',
+            fontSize: '12px',
             fontWeight: 800,
             letterSpacing: '-0.5px',
             fontFamily: 'serif',
           }}
         >
-          SRP
+          SR
         </span>
       </div>
     ),
