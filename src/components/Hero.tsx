@@ -130,7 +130,7 @@ export default function Hero() {
           style={{
             fontFamily: 'var(--font-display)',
             letterSpacing: '-0.035em',
-            lineHeight: 0.9,
+            lineHeight: 1.0,
             marginBottom: '2.5rem',
             fontOpticalSizing: 'auto',
           } as React.CSSProperties}

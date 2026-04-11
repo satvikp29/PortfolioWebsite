@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Fraunces, Bricolage_Grotesque, DM_Mono } from 'next/font/google'
 import Cursor from '@/components/Cursor'
 import SpotlightProvider from '@/components/SpotlightProvider'
+import SatvikGPT from '@/components/SatvikGPT'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Cursor />
         <div className="grain-overlay" aria-hidden="true" />
         {children}
+        <SatvikGPT />
       </body>
     </html>
   )
