@@ -62,7 +62,7 @@ export default function Footer() {
         <FadeIn delay={220}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
             <a
-              href="https://www.linkedin.com/in/satvikreddy"
+              href="https://www.linkedin.com/in/satvik-reddyy/"
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="view"

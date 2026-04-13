@@ -209,7 +209,7 @@ export default function About() {
               <div style={{ display: 'flex', gap: '24px' }}>
                 {[
                   { label: 'GitHub', href: 'https://github.com/satvikp29' },
-                  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/satvikreddy' },
+                  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/satvik-reddyy/' },
                 ].map(({ label, href }) => (
                   <a
                     key={label}

@@ -232,7 +232,7 @@ export default function Hero() {
                 GitHub
               </a>
               <a
-                href="https://www.linkedin.com/in/satvikreddy"
+                href="https://www.linkedin.com/in/satvik-reddyy/"
                 target="_blank" rel="noopener noreferrer"
                 className="btn-magnetic flex items-center gap-2 px-5 py-3.5 text-sm font-medium"
                 style={{ border: '1px solid rgba(201,168,76,0.18)', color: '#EEE9E1', transition: 'border-color 0.4s ease, color 0.4s ease' }}
