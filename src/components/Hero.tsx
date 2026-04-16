@@ -146,7 +146,7 @@ export default function Hero() {
           <TextReveal delay={1340}>
             <span
               className="block gradient-text"
-              style={{ fontSize: 'clamp(3.8rem,8vw,9rem)', fontWeight: 600 }}
+              style={{ fontSize: 'clamp(3.8rem,8vw,9rem)', fontWeight: 600, paddingBottom: '0.18em' }}
             >
               Parvathareddy.
             </span>
