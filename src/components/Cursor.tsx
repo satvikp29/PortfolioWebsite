@@ -5,21 +5,20 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 type CursorState = 'default' | 'link' | 'view'
 
 export default function Cursor() {
-  const dotRef  = useRef<HTMLDivElement>(null)
-  const ringRef = useRef<HTMLDivElement>(null)
-  const mouse   = useRef({ x: -300, y: -300 })
-  const ring    = useRef({ x: -300, y: -300 })
-  const rafId   = useRef<number>(0)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const pos        = useRef({ x: -300, y: -300 })
+  const smoothPos  = useRef({ x: -300, y: -300 })
+  const rafId      = useRef<number>(0)
   const [state,   setState]   = useState<CursorState>('default')
   const [visible, setVisible] = useState(false)
 
   const animate = useCallback(() => {
-    ring.current.x += (mouse.current.x - ring.current.x) * 0.1
-    ring.current.y += (mouse.current.y - ring.current.y) * 0.1
-    if (dotRef.current)
-      dotRef.current.style.transform  = `translate(${mouse.current.x}px, ${mouse.current.y}px) translate(-50%,-50%)`
-    if (ringRef.current)
-      ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%,-50%)`
+    smoothPos.current.x += (pos.current.x - smoothPos.current.x) * 0.12
+    smoothPos.current.y += (pos.current.y - smoothPos.current.y) * 0.12
+    if (cursorRef.current) {
+      cursorRef.current.style.transform =
+        `translate(${smoothPos.current.x}px, ${smoothPos.current.y}px) translate(-50%, -50%)`
+    }
     rafId.current = requestAnimationFrame(animate)
   }, [])
 
@@ -28,18 +27,17 @@ export default function Cursor() {
     if (window.matchMedia('(pointer: coarse)').matches) return
 
     const onMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY }
+      pos.current = { x: e.clientX, y: e.clientY }
       if (!visible) setVisible(true)
     }
     const onOver = (e: MouseEvent) => {
       const el = (e.target as HTMLElement).closest('a, button, [data-cursor]')
       if (!el) { setState('default'); return }
-      const attr = (el as HTMLElement).getAttribute('data-cursor')
-      setState(attr === 'view' ? 'view' : 'link')
+      setState((el as HTMLElement).getAttribute('data-cursor') === 'view' ? 'view' : 'link')
     }
 
-    document.addEventListener('mousemove',  onMove, { passive: true })
-    document.addEventListener('mouseover',  onOver, { passive: true })
+    document.addEventListener('mousemove', onMove, { passive: true })
+    document.addEventListener('mouseover', onOver, { passive: true })
     document.documentElement.addEventListener('mouseleave', () => setVisible(false))
     document.documentElement.addEventListener('mouseenter', () => setVisible(true))
     rafId.current = requestAnimationFrame(animate)
@@ -51,70 +49,82 @@ export default function Cursor() {
     }
   }, [animate, visible])
 
-  const isView = state === 'view'
-  const isLink = state === 'link'
-  const ringSize = isView ? 76 : isLink ? 48 : 38
+  // Reticle sizing
+  const spread  = state === 'view' ? 20 : state === 'link' ? 14 : 9
+  const legLen  = state === 'view' ? 12 : state === 'link' ? 10 : 7
+  const color   = state === 'default' ? 'rgba(201,168,76,0.75)' : '#C9A84C'
+  const thickness = 1.5
+
+  const corner = (x: number, y: number, flipX: boolean, flipY: boolean) => ({
+    position: 'absolute' as const,
+    width:  legLen,
+    height: legLen,
+    left:   x - legLen / 2,
+    top:    y - legLen / 2,
+    borderTop:    flipY ? 'none' : `${thickness}px solid ${color}`,
+    borderBottom: flipY ? `${thickness}px solid ${color}` : 'none',
+    borderLeft:   flipX ? 'none' : `${thickness}px solid ${color}`,
+    borderRight:  flipX ? `${thickness}px solid ${color}` : 'none',
+    transition:   'all 0.22s cubic-bezier(0.65, 0.05, 0, 1)',
+  })
+
+  const size = spread * 2 + legLen
+  const c    = size / 2
 
   return (
-    <>
-      {/* Trailing ring */}
-      <div
-        ref={ringRef}
-        aria-hidden="true"
-        style={{
-          position:       'fixed',
-          top: 0, left: 0,
-          width:          ringSize,
-          height:         ringSize,
-          borderRadius:   '50%',
-          border:         `1px solid ${isView ? 'rgba(201,168,76,0.85)' : 'rgba(201,168,76,0.4)'}`,
-          backgroundColor: isView ? 'rgba(201,168,76,0.05)' : 'transparent',
-          pointerEvents:  'none',
-          zIndex:         10002,
-          opacity:        visible ? 1 : 0,
-          display:        'flex',
-          alignItems:     'center',
-          justifyContent: 'center',
-          transition:
-            'width 0.3s cubic-bezier(0.65,0.05,0,1), height 0.3s cubic-bezier(0.65,0.05,0,1), background-color 0.25s ease, border-color 0.25s ease, opacity 0.35s ease',
-          willChange: 'transform',
-        }}
-      >
-        <span
-          style={{
-            fontFamily:    'var(--font-sans)',
-            fontSize:      '8px',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color:         '#C9A84C',
-            fontWeight:    700,
-            opacity:       isView ? 1 : 0,
-            transition:    'opacity 0.2s ease',
-            userSelect:    'none',
-          }}
-        >
-          View
-        </span>
-      </div>
+    <div
+      ref={cursorRef}
+      aria-hidden="true"
+      style={{
+        position:      'fixed',
+        top:           0,
+        left:          0,
+        width:         size,
+        height:        size,
+        pointerEvents: 'none',
+        zIndex:        10003,
+        opacity:       visible ? 1 : 0,
+        transition:    'opacity 0.3s ease',
+        willChange:    'transform',
+      }}
+    >
+      {/* Centre dot — 1px pixel */}
+      <div style={{
+        position:        'absolute',
+        left:            c - 1,
+        top:             c - 1,
+        width:           2,
+        height:          2,
+        background:      color,
+        borderRadius:    '50%',
+        transition:      `background 0.2s ease`,
+      }} />
 
-      {/* Sharp dot */}
-      <div
-        ref={dotRef}
-        aria-hidden="true"
-        style={{
-          position:        'fixed',
-          top: 0, left: 0,
-          width:           isLink ? 0 : 5,
-          height:          isLink ? 0 : 5,
-          borderRadius:    '50%',
-          backgroundColor: '#C9A84C',
-          pointerEvents:   'none',
-          zIndex:          10003,
-          opacity:         visible ? 1 : 0,
-          transition:      'width 0.2s ease, height 0.2s ease, opacity 0.3s ease',
-          willChange:      'transform',
-        }}
-      />
-    </>
+      {/* 4 corner brackets */}
+      <div style={corner(c - spread, c - spread, false, false)} />  {/* top-left     */}
+      <div style={corner(c + spread, c - spread, true,  false)} />  {/* top-right    */}
+      <div style={corner(c - spread, c + spread, false, true)}  />  {/* bottom-left  */}
+      <div style={corner(c + spread, c + spread, true,  true)}  />  {/* bottom-right */}
+
+      {/* "VIEW" label when in view mode */}
+      {state === 'view' && (
+        <div style={{
+          position:      'absolute',
+          left:          '50%',
+          top:           size + 6,
+          transform:     'translateX(-50%)',
+          fontFamily:    'var(--font-sans)',
+          fontSize:      '7px',
+          letterSpacing: '0.22em',
+          color:         '#C9A84C',
+          fontWeight:    700,
+          textTransform: 'uppercase',
+          whiteSpace:    'nowrap',
+          opacity:       0.9,
+        }}>
+          View
+        </div>
+      )}
+    </div>
   )
 }

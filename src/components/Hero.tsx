@@ -56,7 +56,6 @@ export default function Hero() {
         `,
       }}
     >
-      {loaded && <div className="load-bar" />}
 
       {/* Ambient glow layers */}
       <div
